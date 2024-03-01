@@ -23,7 +23,8 @@ import com.example.inventorymanagementapplication.viewmodel.LoginViewModel
 /* Builds the UI for the login screen using the LoginScreen composable
 function. Displays a CircularProgressIndicator if the loading argument of
 the loginState is true. Otherwise displays two text fields and a Login
-button. The text in the last text field is masked for security.
+button. The text in the last text field is masked for security. The button
+can be pressed when there's text in both fields.
 */
 @Preview
 @Composable
@@ -37,6 +38,7 @@ fun LoginScreen() {
                     Alignment.Center
                 )
             )
+
             else -> Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -57,12 +59,17 @@ fun LoginScreen() {
                     value = loginVM.loginState.value.password,
                     onValueChange = {
                         loginVM.setPassword(it)
+                    },
+                    placeholder = {
+                        Text(text = "Password")
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = {
-                    loginVM.login()
-                }) {
+                Button(
+                    enabled = loginVM.loginState.value.username != "" && loginVM.loginState.value.password != "",
+                    onClick = {
+                        loginVM.login()
+                    }) {
                     Text(text = "Login")
                 }
             }
