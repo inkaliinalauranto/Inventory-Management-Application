@@ -35,6 +35,8 @@ function. Displays a CircularProgressIndicator if the loading argument of
 the loginState is true. Otherwise displays two text fields and a Login
 button. The text in the last text field is masked for security. The button
 can be pressed when there's text in both fields.
+
+When the button is pressed, callback function are called.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
