@@ -7,7 +7,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -77,7 +81,14 @@ class MainActivity : ComponentActivity() {
                                         scope.launch {
                                             drawerState.close()
                                         }
-                                    })
+                                    },
+                                    icon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.Home,
+                                            contentDescription = "Home"
+                                        )
+                                    }
+                                )
                                 NavigationDrawerItem(
                                     label = { Text(text = "Login") },
                                     selected = route == "loginScreen",
@@ -86,6 +97,12 @@ class MainActivity : ComponentActivity() {
                                         scope.launch {
                                             drawerState.close()
                                         }
+                                    },
+                                    icon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.Lock,
+                                            contentDescription = "Login"
+                                        )
                                     }
                                 )
                             }
@@ -93,7 +110,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         NavHost(
                             navController = navController,
-                            startDestination = "categoriesScreen"
+                            startDestination = "loginScreen"
                         ) {
                             /* Screens and their corresponding routes are
                             defined using composables. Each screen is
@@ -107,11 +124,16 @@ class MainActivity : ComponentActivity() {
                                 })
                             }
                             composable(route = "loginScreen") {
-                                LoginScreen(onMenuClick = {
+                                LoginScreen(
+                                    onMenuClick = {
                                     scope.launch {
                                         drawerState.open()
                                     }
-                                })
+                                },
+                                    onLoginClick = {
+                                        navController.navigate(route = "categoriesScreen")
+                                    }
+                                )
                             }
                         }
                     }

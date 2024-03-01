@@ -38,7 +38,7 @@ can be pressed when there's text in both fields.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(onMenuClick: () -> Unit) {
+fun LoginScreen(onMenuClick: () -> Unit, onLoginClick: () -> Unit) {
     Scaffold(topBar = {
         TopAppBar(
             navigationIcon = {
@@ -91,6 +91,7 @@ fun LoginScreen(onMenuClick: () -> Unit) {
                         enabled = loginVM.loginState.value.username != "" && loginVM.loginState.value.password != "",
                         onClick = {
                             loginVM.login()
+                            onLoginClick()
                         }) {
                         Text(text = "Login")
                     }

@@ -1,6 +1,5 @@
 package com.example.inventorymanagementapplication
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,6 +17,8 @@ import androidx.compose.ui.Modifier
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesScreen(onMenuClicked: () -> Unit) {
+    // An instance of the CategoriesViewModel is created:
+
     Scaffold(topBar = {
         TopAppBar(
             title = { Text("Categories") },
