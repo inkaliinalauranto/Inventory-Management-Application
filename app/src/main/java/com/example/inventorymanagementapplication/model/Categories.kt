@@ -9,6 +9,11 @@ data class CategoriesState(
     val error: String? = null,
 )
 
+
+// CategoriesRes and its argument with a default value:
+data class CategoriesRes(val categories: List<CategoryItem> = emptyList())
+
+
 /* A single category item structure. SerializedName tag is used for defining
 a variable name that is used with serialization to json as a key of the
 variable value:
