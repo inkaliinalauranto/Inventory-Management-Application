@@ -10,7 +10,11 @@ data class CategoriesState(
 )
 
 
-// CategoriesRes and its argument with a default value:
+/* CategoriesRes and its argument with a default value. The API method
+getCategories inherits this data class and the categories argument of
+this structure is set as a value of the list argument in an instance created
+from CategoriesState:
+ */
 data class CategoriesRes(val categories: List<CategoryItem> = emptyList())
 
 
