@@ -25,11 +25,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.inventorymanagementapplication.model.CategoryItem
 import com.example.inventorymanagementapplication.viewmodel.CategoriesViewModel
 
+/* Parameters:
+- onMenuClicked: Callback function invoked when the menu icon is clicked.
+- goToCategoryEdit: Callback function invoked to navigate to the
+CategoryEditScreen with a CategoryItem parameter.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen(onMenuClicked: () -> Unit) {
+fun CategoriesScreen(onMenuClicked: () -> Unit, goToCategoryEdit: (CategoryItem) -> Unit) {
     // An instance of the CategoriesViewModel is created:
     val categoriesVM: CategoriesViewModel = viewModel()
     // Top bar is created insides Scaffold:
@@ -95,7 +101,7 @@ fun CategoriesScreen(onMenuClicked: () -> Unit) {
                                     )
                                 }
                                 IconButton(onClick = {
-                                    // goToCategoryEdit(it)
+                                     goToCategoryEdit(it)
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.Edit, contentDescription = "Edit"

@@ -117,10 +117,18 @@ class MainActivity : ComponentActivity() {
                             associated with its specific composable method:
                             */
                             composable(route = "categoriesScreen") {
-                                CategoriesScreen(onMenuClicked = {
+                                CategoriesScreen(
+                                    onMenuClicked = {
                                     scope.launch {
                                         drawerState.open()
                                     }
+                                },
+                                    /* Callback to navigate to the
+                                    CategoryEditScreen with the given
+                                    CategoryItem:
+                                    */
+                                    goToCategoryEdit = {categoryItem ->
+                                        navController.navigate("categoryEditScreen/${categoryItem.categoryId}")
                                 })
                             }
                             composable(route = "loginScreen") {
@@ -134,6 +142,9 @@ class MainActivity : ComponentActivity() {
                                         navController.navigate(route = "categoriesScreen")
                                     }
                                 )
+                            }
+                            composable(route = "categoryEditScreen/{categoryId}") {
+                                CategoryEditScreen()
                             }
                         }
                     }
