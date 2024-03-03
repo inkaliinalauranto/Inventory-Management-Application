@@ -9,7 +9,7 @@ private val retrofit = createClient()
 /* A retrofit service interface implementation is created from CategoriesApi
 interface. The service implements the method of the interface:
 */
-val categoriesService = retrofit.create(CategoriesApi::class.java)
+val categoriesService: CategoriesApi = retrofit.create(CategoriesApi::class.java)
 
 
 interface CategoriesApi {

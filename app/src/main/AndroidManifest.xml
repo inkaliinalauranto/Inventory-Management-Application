@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permission to use internet: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- Setting the usesCleartextTraffic attribute to true, unsecured
      HTTP connection is allowed: -->
     <application
