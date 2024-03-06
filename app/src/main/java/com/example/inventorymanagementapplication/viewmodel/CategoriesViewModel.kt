@@ -15,8 +15,8 @@ class CategoriesViewModel : ViewModel() {
     */
     private val _categoriesState = mutableStateOf(CategoriesState())
 
-    /* The public non-mutable variable representing the current login state
-    providing read-only access to the categories state:
+    /* The public non-mutable variable representing the current categories
+    state providing read-only access to the categories state:
     */
     val categoriesState: State<CategoriesState> = _categoriesState
 

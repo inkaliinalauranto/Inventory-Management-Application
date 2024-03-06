@@ -10,7 +10,7 @@ data class CategoriesState(
 )
 
 
-/* Comments... */
+// CategoryState and its arguments with default values:
 data class CategoryState(
     val categoryName: String = "",
     val loading: Boolean = false,
