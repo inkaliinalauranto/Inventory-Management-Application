@@ -10,12 +10,24 @@ data class CategoriesState(
 )
 
 
+/* Comments... */
+data class CategoryState(
+    val categoryName: String = "",
+    val loading: Boolean = false,
+    val error: String? = null
+)
+
+
 /* CategoriesRes and its argument with a default value. The API method
 getCategories inherits this data class and the categories argument of
 this structure is set as a value of the list argument in an instance created
 from CategoriesState:
  */
 data class CategoriesRes(val categories: List<CategoryItem> = emptyList())
+
+
+/* Comments... */
+data class CategoryRes(val category: CategoryItem)
 
 
 /* A single category item structure. SerializedName tag is used for defining
@@ -25,6 +37,13 @@ variable value:
 data class CategoryItem(
     @SerializedName("category_id")
     val categoryId: Int = 0,
+    @SerializedName("category_name")
+    val categoryName: String = ""
+)
+
+
+/* Comments... */
+data class UpdateCategoryReq(
     @SerializedName("category_name")
     val categoryName: String = ""
 )
