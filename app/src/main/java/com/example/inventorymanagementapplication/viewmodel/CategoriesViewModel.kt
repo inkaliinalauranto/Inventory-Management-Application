@@ -1,5 +1,6 @@
 package com.example.inventorymanagementapplication.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -43,7 +44,8 @@ class CategoriesViewModel : ViewModel() {
             try {
                 _categoriesState.value = _categoriesState.value.copy(loading = true)
                 val categoriesRes = categoriesService.getCategories()
-                _categoriesState.value = _categoriesState.value.copy(list = categoriesRes.categories)
+                _categoriesState.value =
+                    _categoriesState.value.copy(list = categoriesRes.categories)
             } catch (e: Exception) {
                 _categoriesState.value = _categoriesState.value.copy(error = e.toString())
             } finally {
@@ -53,15 +55,26 @@ class CategoriesViewModel : ViewModel() {
     }
 
 
-    /* With filter lambda, the value of _categoriesState's list argument
+    /* Removes the category passed as a parameter from the backend using
+    the removeCategory (API) interface method.
+
+    With filter lambda, the value of _categoriesState's list argument
     is filtered by omitting an item that has the same categoryId than
     the parameter's category_id. Then this new filtered list is set as
     list state.
     */
     fun deleteCategory(category: CategoryItem) {
-        val categories = _categoriesState.value.list.filter {
-            it.categoryId != category.categoryId
+        viewModelScope.launch {
+            try {
+                categoriesService.removeCategory(category.categoryId)
+                val categories = _categoriesState.value.list.filter {
+                    it.categoryId != category.categoryId
+                }
+                _categoriesState.value = _categoriesState.value.copy(list = categories)
+            } catch (e: Exception) {
+                Log.d("TAG", e.toString())
+            }
         }
-        _categoriesState.value = _categoriesState.value.copy(list = categories)
     }
+
 }
