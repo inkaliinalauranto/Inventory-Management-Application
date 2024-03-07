@@ -26,7 +26,7 @@ class CategoryEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     /* The value of the id variable is set to the category id obtained from
     savedStateHandle transmitted as a parameter. If there's no value or it
-    cannot be converted to integer, _id is set to 0.
+    cannot be converted to integer, id is set to 0.
     */
     val id = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
 
@@ -59,18 +59,26 @@ class CategoryEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         } catch (e: Exception) {
             _categoryState.value = _categoryState.value.copy(error = e.toString())
         } finally {
-            _categoryState.value = _categoryState.value.copy(loading = true)
+            _categoryState.value = _categoryState.value.copy(loading = false)
         }
     }
 
 
-    // Public setter method for updating _categoryState value:
+    /* Public setter method for updating the categoryName argument of the
+    _categoryState's CategoryState instance:
+     */
     fun setName(newName: String) {
         _categoryState.value = _categoryState.value.copy(categoryName = newName)
     }
 
 
-    /* Comments... */
+    /* A function for fetching a category by id from the API and updating the
+    category name using the editCategory (API) interface method. The id and
+    categoryName arguments are given as parameters to editCategory method.
+    The value of categoryName as a parameter is set to the categoryName value
+    of category state's instance. After that, the method transmitted as a
+    parameter is called.
+    */
     fun editCategory(goToCategories: () -> Unit) {
         try {
             viewModelScope.launch {
@@ -79,6 +87,7 @@ class CategoryEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
                     id,
                     UpdateCategoryReq(categoryName = _categoryState.value.categoryName)
                 )
+                goToCategories()
             }
         } catch (e: Exception) {
             _categoryState.value = _categoryState.value.copy(error = e.toString())

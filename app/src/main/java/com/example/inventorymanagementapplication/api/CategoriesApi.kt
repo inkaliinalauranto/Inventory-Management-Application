@@ -19,22 +19,35 @@ val categoriesService: CategoriesApi = retrofit.create(CategoriesApi::class.java
 
 
 interface CategoriesApi {
-    /* Comments... */
+    /* API-method that fetches all category items from
+    http://10.0.2.2:8000/api/v1/category. It returns a CategoriesRes
+    data class object.
+    */
     @GET("category/")
-    suspend fun getCategories() : CategoriesRes
+    suspend fun getCategories(): CategoriesRes
 
-    /* Comments... */
+    /* API-method that fetches a category item according to the category id
+    from http://10.0.2.2:8000/api/v1/category/{categoryId}. It returns
+    a CategoryRes data class object.
+    */
     @GET("category/{categoryId}")
     suspend fun getCategoryById(@Path("categoryId") categoryId: Int): CategoryRes
 
-    /* Comments... */
+    /* API-method that modifies the name value of a category item according to
+    the category id. The category item resource is applied from
+    http://10.0.2.2:8000/api/v1/category/{categoryId}. It returns a
+    CategoryRes data class object with the new value set by reqBody parameter.
+    */
     @PUT("category/{categoryId}")
     suspend fun editCategory(
         @Path("categoryId") categoryId: Int,
         @Body reqBody: UpdateCategoryReq
     ): CategoryRes
 
-    /* Comments... */
+    /* API-method that removes a category item according to the category id.
+    The category item resource is retrieved from
+    http://10.0.2.2:8000/api/v1/category/{categoryId}.
+    */
     @DELETE("category/{categoryId}")
     suspend fun removeCategory(
         @Path("categoryId") categoryId: Int

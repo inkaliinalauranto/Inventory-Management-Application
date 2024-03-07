@@ -18,15 +18,18 @@ data class CategoryState(
 )
 
 
-/* CategoriesRes and its argument with a default value. The API method
-getCategories inherits this data class and the categories argument of
-this structure is set as a value of the list argument in an instance created
-from CategoriesState:
+/* CategoriesRes and its argument with a default value representing a
+response from the API method getCategories. The categories argument
+contains a list of CategoryItems.
  */
 data class CategoriesRes(val categories: List<CategoryItem> = emptyList())
 
 
-/* Comments... */
+/* CategoryRes and its argument with a default value. The API method
+getCategoryById returns a response that is in the format of this data
+class. The category argument of this structure is in the form of the
+CategoryItem data class object.
+ */
 data class CategoryRes(val category: CategoryItem)
 
 
@@ -42,7 +45,11 @@ data class CategoryItem(
 )
 
 
-/* Comments... */
+/* UpdateCategoryReq and its argument with a default value. The API
+method editCategory returns a response that is in the format of this data
+class. The categoryName argument of this structure is in the form of
+string.
+ */
 data class UpdateCategoryReq(
     @SerializedName("category_name")
     val categoryName: String = ""

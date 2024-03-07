@@ -25,8 +25,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.inventorymanagementapplication.model.CategoryItem
 import com.example.inventorymanagementapplication.viewmodel.CategoriesViewModel
+import java.time.LocalDateTime
+
+
+/* A composable function that asynchronously loads and displays an image from
+a URL address.
+*/
+@Composable
+fun ItemImage() {
+    AsyncImage(
+        model = "https://picsum.photos/seed/${LocalDateTime.now()}/200",
+        contentDescription = null
+    )
+}
+
 
 /* Parameters:
 - onMenuClicked: Callback function invoked when the menu icon is clicked.
@@ -82,7 +97,8 @@ fun CategoriesScreen(onMenuClicked: () -> Unit, goToCategoryEdit: (CategoryItem)
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(text = "Kuva tähän")
+                                // A picture is retrieved:
+                                ItemImage()
                                 Text(text = it.categoryName, style = MaterialTheme.typography.headlineLarge)
                             }
                             Row(
