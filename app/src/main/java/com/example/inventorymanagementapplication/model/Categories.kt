@@ -44,11 +44,22 @@ data class CategoryItem(
     val categoryName: String = ""
 )
 
+/* Although the structures of AddCategoryReq and UpdateCategoryReq data
+classes are the same, they should not be combined into a single generic
+data class due to semantic typing principles. Since CategoriesApi interface
+has dedicated methods for POST and PUT requests with different
+functionalities, separate data models are created.
+*/
+data class AddCategoryReq(
+    @SerializedName("category_name")
+    val categoryName: String = ""
+)
 
-/* UpdateCategoryReq and its argument with a default value. The API
-method editCategory returns a response that is in the format of this data
-class. The categoryName argument of this structure is in the form of
-string.
+
+/* UpdateCategoryReq data class represents the request body format for the
+editCategory API method. It includes the categoryName field, which is
+serialized as "category_name". The default value for categoryName is an
+empty string.
  */
 data class UpdateCategoryReq(
     @SerializedName("category_name")

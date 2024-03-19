@@ -1,5 +1,7 @@
 package com.example.inventorymanagementapplication
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,10 +23,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.inventorymanagementapplication.model.CategoryItem
@@ -39,6 +45,81 @@ fun ItemImage() {
     AsyncImage(
         model = "https://picsum.photos/seed/${LocalDateTime.now()}/200",
         contentDescription = null
+    )
+}
+
+
+/* Parameters:
+- loading: a boolean of which value defines if the confirm button is enabled.
+- error: a nullable string.
+- onDismiss: a callback function invoked when the dismiss text button is
+  clicked.
+- onConfirm: a callback function invoked when the confirm text button is
+  clicked.
+- clearError: a callback function invoked when the value of the error
+  parameter changes from null to a string.
+ */
+@Composable
+fun ConfirmCategoryDelete(
+    loading: Boolean,
+    error: String?,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+    clearError: () -> Unit
+) {
+    val context: Context = LocalContext.current
+
+    /* The lambda block of LaunchedEffect is executed whenever the value
+    of the key1 parameter changes. The lambda of error?.let is executed
+    whenever the value of nullable string shaped error variable is a string.
+    In that case, the value of the error parameter is printed as a Toast
+    message. clearError callback function entered as a parameter switches
+    the value of the categoryDeleteState object's attribute to null after
+    displaying the toast.
+    */
+    LaunchedEffect(key1 = error) {
+        error?.let {
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            clearError()
+        }
+    }
+
+    /* When a trash can icon of a single category item is pressed in the
+    CategoriesScreen, this confirmation window view is displayed.
+    */
+    AlertDialog(
+        onDismissRequest = { /*TODO*/ },
+        confirmButton = {
+            TextButton(
+                onClick = { onConfirm() },
+                enabled = !loading
+            ) {
+                Text(text = "Delete")
+            }
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete category"
+            )
+        },
+        text = {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                when {
+                    loading -> CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+
+                    else -> Text(text = "Are you sure you want to delete this category?")
+                }
+            }
+        },
+        title = { Text(text = "Delete category") },
+        dismissButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text(text = "Cancel")
+            }
+        }
     )
 }
 
