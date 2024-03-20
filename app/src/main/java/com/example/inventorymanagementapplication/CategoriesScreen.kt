@@ -165,11 +165,27 @@ fun CategoriesScreen(onMenuClicked: () -> Unit, goToCategoryEdit: (CategoryItem)
                         Alignment.Center
                     )
                 )
+
                 categoriesVM.categoriesState.value.error != null -> Text(
                     text = "Error: ${categoriesVM.categoriesState.value.error}"
                 )
+
+                /* When the trash can icon of a category is clicked, the
+                id argument of the CategoryDeleteState is set to the id of
+                the clicked category item. In this case, the id is always
+                greater than 0, and the ConfirmCategoryDelete confirmation
+                window is displayed.
+                */
+                categoriesVM.categoryDeleteState.value.id > 0 -> ConfirmCategoryDelete(
+                    loading = categoriesVM.categoryDeleteState.value.loading,
+                    error = categoriesVM.categoryDeleteState.value.error,
+                    onDismiss = { categoriesVM.setDeletableCategoryId(id = 0) },
+                    onConfirm = { categoriesVM.deleteCategory() },
+                    clearError = { categoriesVM.clearDeleteError() }
+                )
+
                 else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    // A single item of items is referenced as "it":
+                    // A single category item is referenced as "it":
                     items(categoriesVM.categoriesState.value.list) {
                         Column(
                             modifier = Modifier.fillMaxWidth()
@@ -186,12 +202,13 @@ fun CategoriesScreen(onMenuClicked: () -> Unit, goToCategoryEdit: (CategoryItem)
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.End
                             ) {
-                                /* When the delete icon button is clicked, the
-                                category item related to the icon button is
-                                deleted:
+                                /* When a category's Delete icon button is
+                                clicked, the category id of the clicked
+                                category is set into _categoryDeleteState of
+                                the categoriesVM instance.
                                  */
                                 IconButton(onClick = {
-                                    categoriesVM.deleteCategory(it)
+                                    categoriesVM.setDeletableCategoryId(it.categoryId)
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.Delete, contentDescription = "Delete"

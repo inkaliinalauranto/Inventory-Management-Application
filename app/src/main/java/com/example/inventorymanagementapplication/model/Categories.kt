@@ -18,6 +18,14 @@ data class CategoryState(
 )
 
 
+// A data class for saving the id of the category to be removed:
+data class CategoryDeleteState(
+    val id: Int = 0,
+    val error: String? = null,
+    val loading: Boolean = false
+)
+
+
 /* CategoriesRes and its argument with a default value representing a
 response from the API method getCategories. The categories argument
 contains a list of CategoryItems.
