@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -135,19 +136,25 @@ fun CategoriesScreen(onMenuClicked: () -> Unit, goToCategoryEdit: (CategoryItem)
     // An instance of the CategoriesViewModel is created:
     val categoriesVM: CategoriesViewModel = viewModel()
     // Top bar is created insides Scaffold:
-    Scaffold(topBar = {
-        TopAppBar(
-            title = { Text("Categories") },
-            navigationIcon = {
-                // Menu icon button:
-                IconButton(onClick = {
-                    onMenuClicked()
-                }) {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-                }
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = { /*TODO*/ }) {
+
             }
-        )
-    }) {
+        },
+        topBar = {
+            TopAppBar(
+                title = { Text("Categories") },
+                navigationIcon = {
+                    // Menu icon button:
+                    IconButton(onClick = {
+                        onMenuClicked()
+                    }) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                    }
+                }
+            )
+        }) {
         /* The actual content of the screen is created as an implementation
         of the Box composable. When fetching categories, the circular progress
         indicator is shown. Alternatively if any error occurs, an error
@@ -196,7 +203,10 @@ fun CategoriesScreen(onMenuClicked: () -> Unit, goToCategoryEdit: (CategoryItem)
                             ) {
                                 // A picture is retrieved:
                                 ItemImage()
-                                Text(text = it.categoryName, style = MaterialTheme.typography.headlineLarge)
+                                Text(
+                                    text = it.categoryName,
+                                    style = MaterialTheme.typography.headlineLarge
+                                )
                             }
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -211,14 +221,16 @@ fun CategoriesScreen(onMenuClicked: () -> Unit, goToCategoryEdit: (CategoryItem)
                                     categoriesVM.setDeletableCategoryId(it.categoryId)
                                 }) {
                                     Icon(
-                                        imageVector = Icons.Default.Delete, contentDescription = "Delete"
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete"
                                     )
                                 }
                                 IconButton(onClick = {
-                                     goToCategoryEdit(it)
+                                    goToCategoryEdit(it)
                                 }) {
                                     Icon(
-                                        imageVector = Icons.Default.Edit, contentDescription = "Edit"
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = "Edit"
                                     )
                                 }
                             }

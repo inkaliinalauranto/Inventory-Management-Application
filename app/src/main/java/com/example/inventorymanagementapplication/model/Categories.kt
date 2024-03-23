@@ -14,7 +14,11 @@ data class CategoriesState(
 data class CategoryState(
     val categoryName: String = "",
     val loading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    /* The value transform of this argument is used in LaunchedEffect of
+    the CategoryEditScreen component.
+    */
+    val done: Boolean = false
 )
 
 

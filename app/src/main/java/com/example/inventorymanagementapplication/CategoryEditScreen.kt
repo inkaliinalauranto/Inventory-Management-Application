@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,19 @@ When the Back button is pressed, goBack callback method is called.
 fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
     // An instance of the CategoryEditViewModel is created:
     val vm: CategoryEditViewModel = viewModel()
+
+    /* The lambda block of LaunchedEffect is executed whenever the value
+    of the key1 parameter changes. Then it is checked if the value of the
+    done argument of the vm instance's state is true. If so, the value
+    is set back to false and, as a side effect, the callback method
+    transmitted as a parameter is called.
+    */
+    LaunchedEffect(key1 = vm.categoryState.value.done) {
+        if (vm.categoryState.value.done) {
+            vm.setDone(done = false)
+            goToCategories()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -67,21 +81,15 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
                 ) {
                     OutlinedTextField(
                         value = vm.categoryState.value.categoryName,
-                        onValueChange = {newName ->
-                            vm.setName(newName)
-                        }
+                        onValueChange = { newName -> vm.setName(newName) }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Row {
-                        Button(onClick = {
-                            vm.editCategory(goToCategories)
-                        }) {
+                        Button(onClick = { vm.editCategory() }) {
                             Text(text = "Edit")
                         }
                         Spacer(modifier = Modifier.width(8.dp))
-                        Button(onClick = {
-                            goBack()
-                        }) {
+                        Button(onClick = { goBack() }) {
                             Text(text = "Back")
                         }
                     }

@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 // This view model is used for controlling data related modifying a category.
 class CategoryEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     /* The private attribute of the class representing the current category
-    state linked to CategoryState data class which includes categoryName,
-    loading and error attributes:
+    state relating to CategoryState data class which includes categoryName,
+    loading, done and error attributes:
     */
     private val _categoryState = mutableStateOf(CategoryState())
 
@@ -64,7 +64,7 @@ class CategoryEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     }
 
 
-    /* Public setter method for updating the categoryName argument of the
+    /* A public setter method for updating the categoryName argument of the
     _categoryState's CategoryState instance:
      */
     fun setName(newName: String) {
@@ -72,27 +72,37 @@ class CategoryEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     }
 
 
-    /* A function for fetching a category by id from the API and updating the
-    category name using the editCategory (API) interface method. The id and
-    categoryName arguments are given as parameters to editCategory method.
-    The value of categoryName as a parameter is set to the categoryName value
-    of category state's instance. After that, the method transmitted as a
-    parameter is called.
+    /* A public setter method for updating the done argument of the
+    _categoryState's CategoryState instance:
     */
-    fun editCategory(goToCategories: () -> Unit) {
-        try {
-            viewModelScope.launch {
+    fun setDone(done: Boolean) {
+        _categoryState.value = _categoryState.value.copy(done = done)
+    }
+
+
+    /* A method for fetching a category by id from the API and updating the
+    category name using the editCategory (API) interface method. The id and
+    categoryName arguments are given as parameters to the editCategory method.
+    The value of the categoryName parameter is set to the categoryName value
+    of the category state's instance. _categoryState's done argument is set
+    to true which activates the LaunchedEffect lambda in CategoryEditScreen
+    and fulfils the condition so that the navigation to the CategoriesScreen
+    is implemented.
+    */
+    fun editCategory() {
+        viewModelScope.launch {
+            try {
                 _categoryState.value = _categoryState.value.copy(loading = true)
                 categoriesService.editCategory(
                     id,
                     UpdateCategoryReq(categoryName = _categoryState.value.categoryName)
                 )
-                goToCategories()
+                setDone(done = true)
+            } catch (e: Exception) {
+                _categoryState.value = _categoryState.value.copy(error = e.toString())
+            } finally {
+                _categoryState.value = _categoryState.value.copy(loading = false)
             }
-        } catch (e: Exception) {
-            _categoryState.value = _categoryState.value.copy(error = e.toString())
-        } finally {
-            _categoryState.value = _categoryState.value.copy(loading = false)
         }
     }
 }
