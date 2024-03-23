@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
@@ -129,17 +130,23 @@ fun ConfirmCategoryDelete(
 - onMenuClicked: Callback function invoked when the menu icon is clicked.
 - goToCategoryEdit: Callback function invoked to navigate to the
 CategoryEditScreen with a CategoryItem parameter.
+- goToCategoryAdd: When the floating button is clicked, the navigation to
+the CategoryAddScreen is implemented through this callback.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen(onMenuClicked: () -> Unit, goToCategoryEdit: (CategoryItem) -> Unit) {
+fun CategoriesScreen(
+    onMenuClicked: () -> Unit,
+    goToCategoryEdit: (CategoryItem) -> Unit,
+    goToCategoryAdd: () -> Unit
+) {
     // An instance of the CategoriesViewModel is created:
     val categoriesVM: CategoriesViewModel = viewModel()
     // Top bar is created insides Scaffold:
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
-
+            FloatingActionButton(onClick = { goToCategoryAdd() }) {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add category")
             }
         },
         topBar = {
@@ -168,9 +175,7 @@ fun CategoriesScreen(onMenuClicked: () -> Unit, goToCategoryEdit: (CategoryItem)
         ) {
             when {
                 categoriesVM.categoriesState.value.loading -> CircularProgressIndicator(
-                    modifier = Modifier.align(
-                        Alignment.Center
-                    )
+                    modifier = Modifier.align(Alignment.Center)
                 )
 
                 categoriesVM.categoriesState.value.error != null -> Text(

@@ -119,25 +119,29 @@ class MainActivity : ComponentActivity() {
                             composable(route = "categoriesScreen") {
                                 CategoriesScreen(
                                     onMenuClicked = {
-                                    scope.launch {
-                                        drawerState.open()
-                                    }
-                                },
-                                    /* Callback to navigate to the
+                                        scope.launch {
+                                            drawerState.open()
+                                        }
+                                    },
+                                    /* Callback for navigating to the
                                     CategoryEditScreen with the given
                                     CategoryItem:
                                     */
-                                    goToCategoryEdit = {categoryItem ->
+                                    goToCategoryEdit = { categoryItem ->
                                         navController.navigate("categoryEditScreen/${categoryItem.categoryId}")
-                                })
+                                    },
+                                    /* Callback for navigating to the
+                                    CategoryAddScreen:
+                                    */
+                                    goToCategoryAdd = { navController.navigate(route = "categoryAddScreen") })
                             }
                             composable(route = "loginScreen") {
                                 LoginScreen(
                                     onMenuClick = {
-                                    scope.launch {
-                                        drawerState.open()
-                                    }
-                                },
+                                        scope.launch {
+                                            drawerState.open()
+                                        }
+                                    },
                                     onLoginClick = {
                                         navController.navigate(route = "categoriesScreen")
                                     }
@@ -148,9 +152,15 @@ class MainActivity : ComponentActivity() {
                                     goToCategories = {
                                         navController.navigate(route = "categoriesScreen")
                                     },
-                                    goBack = {
-                                        navController.navigateUp()
-                                    }
+                                    goBack = { navController.navigateUp() }
+                                )
+                            }
+                            composable(route = "categoryAddScreen") {
+                                CategoryAddScreen(
+                                    goToCategories = {
+                                        navController.navigate(route = "categoriesScreen")
+                                    },
+                                    goBack = { navController.navigateUp() }
                                 )
                             }
                         }

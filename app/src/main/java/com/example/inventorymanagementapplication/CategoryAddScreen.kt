@@ -1,6 +1,6 @@
 package com.example.inventorymanagementapplication
 
-import android.graphics.Paint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,33 +23,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.inventorymanagementapplication.viewmodel.CategoryEditViewModel
+import com.example.inventorymanagementapplication.viewmodel.CategoryAddViewModel
 
-
-/* Builds the top bar and the UI for editing a category using the
-CategoryEditScreen composable function. Displays a CircularProgressIndicator
+/* Builds the top bar and the UI for adding a category using the
+CategoryAddScreen composable function. Displays a CircularProgressIndicator
 if the loading argument of the categoryState is true. Alternatively if an
 error occurs, an error message is displayed on the screen.
 
 Otherwise, it displays a text field and two adjacent buttons below the field.
-When the Edit button is pressed, the editCategories method of the vm instance
+When the add button is pressed, the addCategories method of the vm instance
 is called. When the Back button is pressed, the goBack callback is called.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
-    // An instance of the CategoryEditViewModel is created:
-    val vm: CategoryEditViewModel = viewModel()
+fun CategoryAddScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
+    val vm: CategoryAddViewModel = viewModel()
 
     /* The lambda block of LaunchedEffect is executed whenever the value
-    of the key1 parameter changes. Then it is checked if the value of the
-    done argument of the vm instance's state is true. If so, the value
-    is set back to false and, as a side effect, the callback method
-    transmitted as a parameter is called.
+    of the key1 parameter changes. If the value of the done argument of the
+    vm instance's state is true, goToCategories callback is called for
+    navigating back to CategoriesScreen composable. Also the done argument
+    is set back to false so that it doesn't stay the same during the
+    execution of the program blocking the implementation of the navigation
+    logic.
     */
     LaunchedEffect(key1 = vm.categoryState.value.done) {
         if (vm.categoryState.value.done) {
-            vm.setDone(done = false)
+            vm.setDone(false)
             goToCategories()
         }
     }
@@ -58,7 +58,7 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = vm.categoryState.value.categoryName)
+                    Text(text = "Lisää kategoria")
                 }
             )
         }
@@ -72,7 +72,9 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
                 vm.categoryState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
-                vm.categoryState.value.error != null -> Text(text = "Virhe: ${vm.categoryState.value.error.toString()}")
+
+                vm.categoryState.value.error != null -> Text(text = "Virhe: ${vm.categoryState.value.error}")
+
                 else -> Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -80,12 +82,12 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
                 ) {
                     OutlinedTextField(
                         value = vm.categoryState.value.categoryName,
-                        onValueChange = { newName -> vm.setName(newName) }
+                        onValueChange = { name -> vm.setName(name) }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Row {
-                        Button(onClick = { vm.editCategory() }) {
-                            Text(text = "Muokkaa")
+                        Button(onClick = { vm.addCategory() }) {
+                            Text(text = "Lisää")
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Button(onClick = { goBack() }) {
