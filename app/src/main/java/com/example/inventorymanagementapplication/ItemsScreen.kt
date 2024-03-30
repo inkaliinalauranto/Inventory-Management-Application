@@ -13,9 +13,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,8 +32,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.inventorymanagementapplication.viewmodel.CategoriesViewModel
 import com.example.inventorymanagementapplication.viewmodel.ItemsViewModel
 
 
@@ -122,28 +122,29 @@ the CategoryAddScreen is implemented through this callback.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemsScreen(
-//    onMenuClicked: () -> Unit,
 //    goToCategoryEdit: (CategoryItem) -> Unit,
-//    goToCategoryAdd: () -> Unit
+    goBack: () -> Unit
 ) {
     // An instance of the CategoriesViewModel is created:
     val itemsVM: ItemsViewModel = viewModel()
+
+
     // Top bar is created insides Scaffold:
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { /*goToCategoryAdd()*/ }) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add category")
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "Lisää kategoria")
             }
         },
         topBar = {
             TopAppBar(
-                title = { Text("Categories") },
+                title = { Text("Tavarat") },
                 navigationIcon = {
                     // Menu icon button:
                     IconButton(onClick = {
-                        /*onMenuClicked()*/
+                        goBack()
                     }) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
@@ -183,46 +184,54 @@ fun ItemsScreen(
                 )
 
                 else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    // A single category item is referenced as "it":
+                    // A single item is referenced as "it":
                     items(itemsVM.itemsState.value.list) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
+                        Column(modifier = Modifier.fillMaxWidth()) {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 25.dp, top = 25.dp)
                             ) {
-                                // A picture is retrieved:
-                                ItemImage()
-                                Text(
-                                    text = it.itemName,
-                                    style = MaterialTheme.typography.headlineLarge
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End
-                            ) {
-                                /* When a category's Delete icon button is
-                                clicked, the category id of the clicked
-                                category is set into _categoryDeleteState of
-                                the categoriesVM instance.
-                                 */
-                                IconButton(onClick = {
-                                    /*itemsVM.setDeletableCategoryId(it.categoryId)*/
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "Delete"
-                                    )
+                                Column(modifier = Modifier.align(Alignment.CenterVertically)) {
+                                    // A picture is retrieved:
+                                    ItemImage()
                                 }
-                                IconButton(onClick = {
-                                    /*goToCategoryEdit(it)*/
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Edit,
-                                        contentDescription = "Edit"
-                                    )
+                                Column(modifier = Modifier.align(Alignment.CenterVertically)) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        Text(
+                                            text = it.itemName,
+                                            style = MaterialTheme.typography.headlineLarge
+                                        )
+                                    }
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        /* When a category's Delete icon button is
+                                        clicked, the category id of the clicked
+                                        category is set into _categoryDeleteState of
+                                        the categoriesVM instance.
+                                         */
+                                        IconButton(onClick = {
+                                            /*itemsVM.setDeletableCategoryId(it.categoryId)*/
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Delete,
+                                                contentDescription = "Delete"
+                                            )
+                                        }
+                                        IconButton(onClick = {
+                                            /*goToCategoryEdit(it)*/
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Edit,
+                                                contentDescription = "Edit"
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }

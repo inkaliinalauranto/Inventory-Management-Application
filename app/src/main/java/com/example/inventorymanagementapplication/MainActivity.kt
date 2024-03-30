@@ -128,13 +128,14 @@ class MainActivity : ComponentActivity() {
                                     CategoryItem:
                                     */
                                     goToCategoryEdit = { categoryItem ->
-                                        navController.navigate("categoryEditScreen/${categoryItem.categoryId}")
+                                        navController.navigate(route = "categoryEditScreen/${categoryItem.categoryId}")
                                     },
                                     /* Callback for navigating to the
                                     CategoryAddScreen:
                                     */
                                     goToCategoryAdd = { navController.navigate(route = "categoryAddScreen") },
-                                    goToItemList = { navController.navigate(route = "itemsScreen") }
+                                    goToItemList = { categoryItem ->
+                                        navController.navigate(route = "itemsScreen/${categoryItem.categoryId}") }
                                 )
                             }
                             composable(route = "loginScreen") {
@@ -165,8 +166,10 @@ class MainActivity : ComponentActivity() {
                                     goBack = { navController.navigateUp() }
                                 )
                             }
-                            composable(route = "itemsScreen") {
-                                ItemsScreen()
+                            composable(route = "itemsScreen/{categoryId}") {
+                                ItemsScreen(
+                                    goBack = { navController.navigateUp() }
+                                )
                             }
                         }
                     }

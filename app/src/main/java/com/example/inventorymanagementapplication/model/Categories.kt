@@ -92,9 +92,9 @@ a variable name that is used with serialization to json as a key of the
 variable value:
  */
 data class Item(
-    @SerializedName("item_id")
+    @SerializedName("rental_item_id")
     val itemId: Int = 0,
-    @SerializedName("item_name")
+    @SerializedName("rental_item_name")
     val itemName: String = ""
 )
 

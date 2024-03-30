@@ -2,6 +2,7 @@ package com.example.inventorymanagementapplication.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.api.categoriesService
@@ -9,7 +10,10 @@ import com.example.inventorymanagementapplication.model.ItemDeleteState
 import com.example.inventorymanagementapplication.model.ItemsState
 import kotlinx.coroutines.launch
 
-class ItemsViewModel : ViewModel() {
+class ItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+
+    val id = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
+
     /* The private attribute of the class representing the current items
     state:
     */
@@ -36,7 +40,7 @@ class ItemsViewModel : ViewModel() {
     init lambda is called:
     */
     init {
-        getItems(categoryId = 2)
+        getItems()
     }
 
 
@@ -49,11 +53,11 @@ class ItemsViewModel : ViewModel() {
     occurs, the error state is set. Finally the loading state is set back to
     false.
     */
-    private fun getItems(categoryId: Int) {
+    private fun getItems() {
         viewModelScope.launch {
             try {
                 _itemsState.value = _itemsState.value.copy(loading = true)
-                val itemsRes = categoriesService.getItemsByCategoryId(categoryId)
+                val itemsRes = categoriesService.getItemsByCategoryId(id)
                 _itemsState.value =
                     _itemsState.value.copy(list = itemsRes.items)
             } catch (e: Exception) {
