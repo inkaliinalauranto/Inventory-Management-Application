@@ -77,3 +77,38 @@ data class UpdateCategoryReq(
     @SerializedName("category_name")
     val categoryName: String = ""
 )
+
+
+// CategoryItemsState and its arguments with default values:
+data class ItemsState(
+    val list: List<Item> = emptyList(),
+    val loading: Boolean = false,
+    val error: String? = null,
+)
+
+
+/* A single item structure. SerializedName tag is used for defining
+a variable name that is used with serialization to json as a key of the
+variable value:
+ */
+data class Item(
+    @SerializedName("item_id")
+    val itemId: Int = 0,
+    @SerializedName("item_name")
+    val itemName: String = ""
+)
+
+
+// A data class for saving the id of the item to be removed:
+data class ItemDeleteState(
+    val id: Int = 0,
+    val error: String? = null,
+    val loading: Boolean = false
+)
+
+
+/* ItemsRes and its argument with a default value representing a
+response from the API method getItemsByCategoryId. The items argument
+contains a list of objects in the form of Item data class.
+ */
+data class ItemsRes(val items: List<Item> = emptyList())

@@ -3,6 +3,7 @@ package com.example.inventorymanagementapplication.api
 import com.example.inventorymanagementapplication.model.AddCategoryReq
 import com.example.inventorymanagementapplication.model.CategoriesRes
 import com.example.inventorymanagementapplication.model.CategoryRes
+import com.example.inventorymanagementapplication.model.ItemsRes
 import com.example.inventorymanagementapplication.model.UpdateCategoryReq
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -63,4 +64,11 @@ interface CategoriesApi {
     suspend fun removeCategory(
         @Path("categoryId") categoryId: Int
     )
+
+    /* An API-method that fetches an item according to the category id
+    from http://10.0.2.2:8000/api/v1/category/{categoryId}/items. It returns
+    a ItemsRes data class object.
+    */
+    @GET("category/{categoryId}/items")
+    suspend fun getItemsByCategoryId(@Path("categoryId") categoryId: Int): ItemsRes
 }

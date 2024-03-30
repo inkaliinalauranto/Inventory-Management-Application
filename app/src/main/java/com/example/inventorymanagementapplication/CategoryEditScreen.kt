@@ -58,7 +58,7 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = vm.categoryState.value.categoryName)
+                    Text(text = "Muokkaa kategorian nimeä")
                 }
             )
         }

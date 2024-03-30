@@ -133,7 +133,9 @@ class MainActivity : ComponentActivity() {
                                     /* Callback for navigating to the
                                     CategoryAddScreen:
                                     */
-                                    goToCategoryAdd = { navController.navigate(route = "categoryAddScreen") })
+                                    goToCategoryAdd = { navController.navigate(route = "categoryAddScreen") },
+                                    goToItemList = { navController.navigate(route = "itemsScreen") }
+                                )
                             }
                             composable(route = "loginScreen") {
                                 LoginScreen(
@@ -162,6 +164,9 @@ class MainActivity : ComponentActivity() {
                                     },
                                     goBack = { navController.navigateUp() }
                                 )
+                            }
+                            composable(route = "itemsScreen") {
+                                ItemsScreen()
                             }
                         }
                     }

@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -34,22 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import com.example.inventorymanagementapplication.model.CategoryItem
 import com.example.inventorymanagementapplication.viewmodel.CategoriesViewModel
-import java.time.LocalDateTime
-
-
-/* A composable function that asynchronously loads and displays an image from
-a URL address.
-*/
-@Composable
-fun ItemImage() {
-    AsyncImage(
-        model = "https://picsum.photos/seed/${LocalDateTime.now()}/200",
-        contentDescription = null
-    )
-}
+import com.example.inventorymanagementapplication.viewmodel.ItemsViewModel
 
 
 /* Parameters:
@@ -63,7 +48,7 @@ fun ItemImage() {
   parameter changes from null to a string.
  */
 @Composable
-fun ConfirmCategoryDelete(
+fun ConfirmItemDelete(
     loading: Boolean,
     error: String?,
     onDismiss: () -> Unit,
@@ -136,18 +121,17 @@ the CategoryAddScreen is implemented through this callback.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen(
-    onMenuClicked: () -> Unit,
-    goToCategoryEdit: (CategoryItem) -> Unit,
-    goToCategoryAdd: () -> Unit,
-    goToItemList: () -> Unit
+fun ItemsScreen(
+//    onMenuClicked: () -> Unit,
+//    goToCategoryEdit: (CategoryItem) -> Unit,
+//    goToCategoryAdd: () -> Unit
 ) {
     // An instance of the CategoriesViewModel is created:
-    val categoriesVM: CategoriesViewModel = viewModel()
+    val itemsVM: ItemsViewModel = viewModel()
     // Top bar is created insides Scaffold:
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { goToCategoryAdd() }) {
+            FloatingActionButton(onClick = { /*goToCategoryAdd()*/ }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add category")
             }
         },
@@ -157,7 +141,7 @@ fun CategoriesScreen(
                 navigationIcon = {
                     // Menu icon button:
                     IconButton(onClick = {
-                        onMenuClicked()
+                        /*onMenuClicked()*/
                     }) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
@@ -176,12 +160,12 @@ fun CategoriesScreen(
                 .padding(it)
         ) {
             when {
-                categoriesVM.categoriesState.value.loading -> CircularProgressIndicator(
+                itemsVM.itemsState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
 
-                categoriesVM.categoriesState.value.error != null -> Text(
-                    text = "Error: ${categoriesVM.categoriesState.value.error}"
+                itemsVM.itemsState.value.error != null -> Text(
+                    text = "Error: ${itemsVM.itemsState.value.error}"
                 )
 
                 /* When the trash can icon of a category is clicked, the
@@ -190,17 +174,17 @@ fun CategoriesScreen(
                 greater than 0, and the ConfirmCategoryDelete confirmation
                 window is displayed.
                 */
-                categoriesVM.categoryDeleteState.value.id > 0 -> ConfirmCategoryDelete(
-                    loading = categoriesVM.categoryDeleteState.value.loading,
-                    error = categoriesVM.categoryDeleteState.value.error,
-                    onDismiss = { categoriesVM.setDeletableCategoryId(id = 0) },
-                    onConfirm = { categoriesVM.deleteCategory() },
-                    clearError = { categoriesVM.clearDeleteError() }
+                itemsVM.itemDeleteState.value.id > 0 -> ConfirmCategoryDelete(
+                    loading = itemsVM.itemDeleteState.value.loading,
+                    error = itemsVM.itemDeleteState.value.error,
+                    onDismiss = { /*itemsVM.setDeletableCategoryId(id = 0)*/ },
+                    onConfirm = { /*itemsVM.deleteCategory()*/ },
+                    clearError = { /*itemsVM.clearDeleteError()*/ }
                 )
 
                 else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
                     // A single category item is referenced as "it":
-                    items(categoriesVM.categoriesState.value.list) {
+                    items(itemsVM.itemsState.value.list) {
                         Column(
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -211,7 +195,7 @@ fun CategoriesScreen(
                                 // A picture is retrieved:
                                 ItemImage()
                                 Text(
-                                    text = it.categoryName,
+                                    text = it.itemName,
                                     style = MaterialTheme.typography.headlineLarge
                                 )
                             }
@@ -225,7 +209,7 @@ fun CategoriesScreen(
                                 the categoriesVM instance.
                                  */
                                 IconButton(onClick = {
-                                    categoriesVM.setDeletableCategoryId(it.categoryId)
+                                    /*itemsVM.setDeletableCategoryId(it.categoryId)*/
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.Delete,
@@ -233,17 +217,12 @@ fun CategoriesScreen(
                                     )
                                 }
                                 IconButton(onClick = {
-                                    goToCategoryEdit(it)
+                                    /*goToCategoryEdit(it)*/
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.Edit,
                                         contentDescription = "Edit"
                                     )
-                                }
-                            }
-                            Row(modifier = Modifier.fillMaxWidth()) {
-                                Button(onClick = { goToItemList() }) {
-                                    Text(text = "Näytä tavarat")
                                 }
                             }
                         }
