@@ -135,7 +135,7 @@ class MainActivity : ComponentActivity() {
                                     */
                                     goToCategoryAdd = { navController.navigate(route = "categoryAddScreen") },
                                     goToItemList = { categoryItem ->
-                                        navController.navigate(route = "itemsScreen/${categoryItem.categoryId}") }
+                                        navController.navigate(route = "rentalItemsScreen/${categoryItem.categoryId}") }
                                 )
                             }
                             composable(route = "loginScreen") {
@@ -166,8 +166,8 @@ class MainActivity : ComponentActivity() {
                                     goBack = { navController.navigateUp() }
                                 )
                             }
-                            composable(route = "itemsScreen/{categoryId}") {
-                                ItemsScreen(
+                            composable(route = "rentalItemsScreen/{categoryId}") {
+                                RentalItemsScreen(
                                     goBack = { navController.navigateUp() }
                                 )
                             }

@@ -6,64 +6,64 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.api.categoriesService
-import com.example.inventorymanagementapplication.model.ItemDeleteState
-import com.example.inventorymanagementapplication.model.ItemsState
+import com.example.inventorymanagementapplication.model.RentalItemDeleteState
+import com.example.inventorymanagementapplication.model.RentalItemsState
 import kotlinx.coroutines.launch
 
-class ItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     val id = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
 
-    /* The private attribute of the class representing the current items
-    state:
+    /* The private attribute of the class representing the current rental
+    items state:
     */
-    private val _itemsState = mutableStateOf(ItemsState())
+    private val _rentalItemsState = mutableStateOf(RentalItemsState())
 
-    /* The public non-mutable variable representing the current items
-    state providing read-only access:
+    /* The public non-mutable variable representing the current rental
+    items state providing read-only access:
     */
-    val itemsState: State<ItemsState> = _itemsState
+    val rentalItemsState: State<RentalItemsState> = _rentalItemsState
 
     /* The private attribute of the class representing the current state of
-    an instance created from CategoryDeleteState data class, which is defined
+    an instance created from RentalItemDeleteState data class, which is defined
     in Categories file:
     */
-    private val _itemDeleteState = mutableStateOf(ItemDeleteState())
+    private val _rentalItemDeleteState = mutableStateOf(RentalItemDeleteState())
 
-    /* The public non-mutable variable representing the state of a item
+    /* The public non-mutable variable representing the state of a rental item
      to be deleted providing read-only access to its state:
     */
-    val itemDeleteState: State<ItemDeleteState> = _itemDeleteState
+    val rentalItemDeleteState: State<RentalItemDeleteState> = _rentalItemDeleteState
 
 
     /* When an instance is made from this class, the function inside
     init lambda is called:
     */
     init {
-        getItems()
+        getRentalItems()
     }
 
 
-    /* A function for fetching items from the API and updating the
-    items state accordingly. viewModelScope is used for coroutine scope
+    /* A function for fetching rental items from the API and updating the
+    rental items state accordingly. viewModelScope is used for coroutine scope
     since the API call is asynchronous. Then the value of the loading argument
-    of the ItemsState's instance is set from false to true. The API
-    method is then called to get the items response. The items state is
-    updated with the items argument of the response. If any exception
+    of the RentalItemsState's instance is set from false to true. The API
+    method is then called to get the rental items response. The rental items
+    state is updated with the items property of the response. If any exception
     occurs, the error state is set. Finally the loading state is set back to
     false.
     */
-    private fun getItems() {
+    private fun getRentalItems() {
         viewModelScope.launch {
             try {
-                _itemsState.value = _itemsState.value.copy(loading = true)
-                val itemsRes = categoriesService.getItemsByCategoryId(id)
-                _itemsState.value =
-                    _itemsState.value.copy(list = itemsRes.items)
+                _rentalItemsState.value = _rentalItemsState.value.copy(loading = true)
+                val rentalItemsRes = categoriesService.getRentalItemsByCategoryId(id)
+                _rentalItemsState.value =
+                    _rentalItemsState.value.copy(list = rentalItemsRes.items)
             } catch (e: Exception) {
-                _itemsState.value = _itemsState.value.copy(error = e.toString())
+                _rentalItemsState.value = _rentalItemsState.value.copy(error = e.toString())
             } finally {
-                _itemsState.value = _itemsState.value.copy(loading = false)
+                _rentalItemsState.value = _rentalItemsState.value.copy(loading = false)
             }
         }
     }

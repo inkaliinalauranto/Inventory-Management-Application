@@ -34,7 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.inventorymanagementapplication.viewmodel.ItemsViewModel
+import com.example.inventorymanagementapplication.viewmodel.RentalItemsViewModel
 
 
 /* Parameters:
@@ -121,12 +121,12 @@ the CategoryAddScreen is implemented through this callback.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemsScreen(
+fun RentalItemsScreen(
 //    goToCategoryEdit: (CategoryItem) -> Unit,
     goBack: () -> Unit
 ) {
     // An instance of the CategoriesViewModel is created:
-    val itemsVM: ItemsViewModel = viewModel()
+    val itemsVM: RentalItemsViewModel = viewModel()
 
 
     // Top bar is created insides Scaffold:
@@ -161,12 +161,12 @@ fun ItemsScreen(
                 .padding(it)
         ) {
             when {
-                itemsVM.itemsState.value.loading -> CircularProgressIndicator(
+                itemsVM.rentalItemsState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
 
-                itemsVM.itemsState.value.error != null -> Text(
-                    text = "Error: ${itemsVM.itemsState.value.error}"
+                itemsVM.rentalItemsState.value.error != null -> Text(
+                    text = "Error: ${itemsVM.rentalItemsState.value.error}"
                 )
 
                 /* When the trash can icon of a category is clicked, the
@@ -175,9 +175,9 @@ fun ItemsScreen(
                 greater than 0, and the ConfirmCategoryDelete confirmation
                 window is displayed.
                 */
-                itemsVM.itemDeleteState.value.id > 0 -> ConfirmCategoryDelete(
-                    loading = itemsVM.itemDeleteState.value.loading,
-                    error = itemsVM.itemDeleteState.value.error,
+                itemsVM.rentalItemDeleteState.value.id > 0 -> ConfirmCategoryDelete(
+                    loading = itemsVM.rentalItemDeleteState.value.loading,
+                    error = itemsVM.rentalItemDeleteState.value.error,
                     onDismiss = { /*itemsVM.setDeletableCategoryId(id = 0)*/ },
                     onConfirm = { /*itemsVM.deleteCategory()*/ },
                     clearError = { /*itemsVM.clearDeleteError()*/ }
@@ -185,7 +185,7 @@ fun ItemsScreen(
 
                 else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
                     // A single item is referenced as "it":
-                    items(itemsVM.itemsState.value.list) {
+                    items(itemsVM.rentalItemsState.value.list) {
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Row(
                                 modifier = Modifier
@@ -202,7 +202,7 @@ fun ItemsScreen(
                                         horizontalArrangement = Arrangement.End
                                     ) {
                                         Text(
-                                            text = it.itemName,
+                                            text = it.rentalItemName,
                                             style = MaterialTheme.typography.headlineLarge
                                         )
                                     }

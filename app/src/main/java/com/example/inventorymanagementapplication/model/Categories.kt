@@ -2,7 +2,7 @@ package com.example.inventorymanagementapplication.model
 
 import com.google.gson.annotations.SerializedName
 
-// CategoriesState and its arguments with default values:
+// CategoriesState and its properties with default values:
 data class CategoriesState(
     val list: List<CategoryItem> = emptyList(),
     val loading: Boolean = false,
@@ -10,12 +10,12 @@ data class CategoriesState(
 )
 
 
-// CategoryState and its arguments with default values:
+// CategoryState and its properties with default values:
 data class CategoryState(
     val categoryName: String = "",
     val loading: Boolean = false,
     val error: String? = null,
-    /* The value transform of this argument is used in LaunchedEffect of
+    /* The value transform of this property is used in LaunchedEffect of
     the CategoryEditScreen component.
     */
     val done: Boolean = false
@@ -30,16 +30,16 @@ data class CategoryDeleteState(
 )
 
 
-/* CategoriesRes and its argument with a default value representing a
-response from the API method getCategories. The categories argument
+/* CategoriesRes and its property with a default value representing a
+response from the API method getCategories. The categories property
 contains a list of CategoryItems.
  */
 data class CategoriesRes(val categories: List<CategoryItem> = emptyList())
 
 
-/* CategoryRes and its argument with a default value. The API method
+/* CategoryRes and its property with a default value. The API method
 getCategoryById returns a response that is in the format of this data
-class. The category argument of this structure is in the form of the
+class. The category property of this structure is in the form of the
 CategoryItem data class object.
  */
 data class CategoryRes(val category: CategoryItem)
@@ -79,36 +79,37 @@ data class UpdateCategoryReq(
 )
 
 
-// CategoryItemsState and its arguments with default values:
-data class ItemsState(
-    val list: List<Item> = emptyList(),
+// RentalItemsState and its properties with default values:
+data class RentalItemsState(
+    val list: List<RentalItem> = emptyList(),
     val loading: Boolean = false,
     val error: String? = null,
 )
 
 
-/* A single item structure. SerializedName tag is used for defining
-a variable name that is used with serialization to json as a key of the
-variable value:
+/* A single rental item structure. SerializedName tag is used for defining
+a variable name that is used with serialization to json and deserialization
+from json as a key of the variable value:
  */
-data class Item(
+data class RentalItem(
     @SerializedName("rental_item_id")
-    val itemId: Int = 0,
+    val rentalItemId: Int = 0,
     @SerializedName("rental_item_name")
-    val itemName: String = ""
+    val rentalItemName: String = ""
 )
 
 
-// A data class for saving the id of the item to be removed:
-data class ItemDeleteState(
+// A data class for saving the id of the rental item to be removed:
+data class RentalItemDeleteState(
     val id: Int = 0,
     val error: String? = null,
     val loading: Boolean = false
 )
 
 
-/* ItemsRes and its argument with a default value representing a
-response from the API method getItemsByCategoryId. The items argument
-contains a list of objects in the form of Item data class.
+/* Represents a response from the API endpoint getRentalItemsByCategoryId.
+Contains a list of rental items retrieved from the API response. The
+items property must correspond to the key in the API response containing
+the list of rental items.
  */
-data class ItemsRes(val items: List<Item> = emptyList())
+data class RentalItemsRes(val items: List<RentalItem> = emptyList())
