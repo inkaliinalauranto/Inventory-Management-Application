@@ -12,12 +12,13 @@ import kotlinx.coroutines.launch
 
 class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
-    val id = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
+    private val id = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
 
     /* The private attribute of the class representing the current rental
     items state:
     */
     private val _rentalItemsState = mutableStateOf(RentalItemsState())
+
 
     /* The public non-mutable variable representing the current rental
     items state providing read-only access:
@@ -60,6 +61,7 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
                 val rentalItemsRes = categoriesService.getRentalItemsByCategoryId(id)
                 _rentalItemsState.value =
                     _rentalItemsState.value.copy(list = rentalItemsRes.items)
+                _rentalItemsState.value = _rentalItemsState.value.copy(categoryId = id)
             } catch (e: Exception) {
                 _rentalItemsState.value = _rentalItemsState.value.copy(error = e.toString())
             } finally {
@@ -87,37 +89,37 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     occurs or not, the loading state is reset to false indicating the end
     of the removal operation.
     */
-//    fun deleteCategory() {
-//        viewModelScope.launch {
-//            try {
-//                _itemDeleteState.value = _itemDeleteState.value.copy(loading = true)
-//                categoriesService.removeCategory(_itemDeleteState.value.id)
-//                val categories = _itemsState.value.list.filter {
-//                    it.categoryId != _itemDeleteState.value.id
-//                }
-//                _itemsState.value = _itemsState.value.copy(list = categories)
-//                _itemDeleteState.value = _itemDeleteState.value.copy(id = 0)
-//            } catch (e: Exception) {
-//                _itemDeleteState.value = _itemDeleteState.value.copy(error = e.toString())
-//            } finally {
-//                _itemDeleteState.value = _itemDeleteState.value.copy(loading = false)
-//            }
-//        }
-//    }
-//
-//
-//    /* Sets the id of the category to be deleted in the _categoryDeleteState
-//    instance. This method is used in CategoriesScreen when the trash can icon
-//    is clicked.
-//    */
-//    fun setDeletableCategoryId(id: Int) {
-//        _itemDeleteState.value = _itemDeleteState.value.copy(id = id)
-//    }
-//
-//
-//    // Resets the error state:
-//    fun clearDeleteError() {
-//        _itemDeleteState.value = _itemDeleteState.value.copy(error = null)
-//    }
+    fun deleteRentalItem() {
+        viewModelScope.launch {
+            try {
+                _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(loading = true)
+                categoriesService.removeRentalItem(_rentalItemDeleteState.value.id)
+                val categories = _rentalItemsState.value.list.filter {
+                    it.rentalItemId != _rentalItemDeleteState.value.id
+                }
+                _rentalItemsState.value = _rentalItemsState.value.copy(list = categories)
+                _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(id = 0)
+            } catch (e: Exception) {
+                _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(error = e.toString())
+            } finally {
+                _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(loading = false)
+            }
+        }
+    }
+
+
+    /* Sets the id of the category to be deleted in the _categoryDeleteState
+    instance. This method is used in CategoriesScreen when the trash can icon
+    is clicked.
+    */
+    fun setDeletableRentalItemId(id: Int) {
+        _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(id = id)
+    }
+
+
+    // Resets the error state:
+    fun clearDeleteError() {
+        _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(error = null)
+    }
 
 }

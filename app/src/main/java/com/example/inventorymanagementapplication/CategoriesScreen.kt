@@ -2,12 +2,10 @@ package com.example.inventorymanagementapplication
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -142,7 +140,7 @@ fun CategoriesScreen(
     onMenuClicked: () -> Unit,
     goToCategoryEdit: (CategoryItem) -> Unit,
     goToCategoryAdd: () -> Unit,
-    goToItemList: (CategoryItem) -> Unit
+    goToRentalItemList: (CategoryItem) -> Unit
 ) {
     // An instance of the CategoriesViewModel is created:
     val categoriesVM: CategoriesViewModel = viewModel()
@@ -229,7 +227,7 @@ fun CategoriesScreen(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.End
                                     ) {
-                                        TextButton(onClick = { goToItemList(it) }) {
+                                        TextButton(onClick = { goToRentalItemList(it) }) {
                                             Text(text = "Näytä tavarat")
                                         }
                                         /* When a category's Delete icon button is

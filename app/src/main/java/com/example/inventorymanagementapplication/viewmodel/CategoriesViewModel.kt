@@ -89,7 +89,7 @@ class CategoriesViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 _categoryDeleteState.value = _categoryDeleteState.value.copy(loading = true)
-                categoriesService.removeCategory(_categoryDeleteState.value.id)
+                categoriesService.removeCategory(categoryId = _categoryDeleteState.value.id)
                 val categories = _categoriesState.value.list.filter {
                     it.categoryId != _categoryDeleteState.value.id
                 }

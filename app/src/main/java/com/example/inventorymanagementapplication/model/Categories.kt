@@ -22,6 +22,19 @@ data class CategoryState(
 )
 
 
+data class RentalItemState(
+    val categoryId: Int = 0,
+    val rentalItemName: String = "",
+    val loading: Boolean = false,
+    val error: String? = null,
+    /* The value transform of this property is used in LaunchedEffect of
+    the CategoryEditScreen component.
+    */
+    val done: Boolean = false
+)
+
+
+
 // A data class for saving the id of the category to be removed:
 data class CategoryDeleteState(
     val id: Int = 0,
@@ -43,6 +56,9 @@ class. The category property of this structure is in the form of the
 CategoryItem data class object.
  */
 data class CategoryRes(val category: CategoryItem)
+
+
+data class RentalItemRes2(val rentalItem: RentalItem)
 
 
 /* A single category item structure. SerializedName tag is used for defining
@@ -68,6 +84,14 @@ data class AddCategoryReq(
 )
 
 
+data class AddRentalItemReq(
+    @SerializedName("rental_item_name")
+    val rentalItemName: String = "",
+    @SerializedName("created_by_user_id")
+    val createdByUserId: Int = 0
+)
+
+
 /* UpdateCategoryReq data class represents the request body format for the
 editCategory API method. It includes the categoryName field, which is
 serialized as "category_name". The default value for categoryName is an
@@ -81,6 +105,7 @@ data class UpdateCategoryReq(
 
 // RentalItemsState and its properties with default values:
 data class RentalItemsState(
+    val categoryId: Int = 0,
     val list: List<RentalItem> = emptyList(),
     val loading: Boolean = false,
     val error: String? = null,
@@ -113,3 +138,54 @@ items property must correspond to the key in the API response containing
 the list of rental items.
  */
 data class RentalItemsRes(val items: List<RentalItem> = emptyList())
+
+
+/* RentalItemRes and its property with a default value. The API method
+getRentalItemById returns a response that is in the format of this data
+class. The rentalItem property of this structure is in the form of the
+RentalItem data class object.
+ */
+data class RentalItemRes(
+    val rentalItemId: Int = 0,
+    val createdByUser: CreatedByUser,
+    val categoryCategory: CategoryCategory,
+    val rentalItemName: String = "",
+    val createdAt: String = "",
+    val rentalItemStateRentalItemState: RentalItemStateRentalItemState,
+    val deletedAt: String? = null
+)
+
+
+data class CreatedByUser(
+    val authUserId: Int = 0,
+    val username: String = "",
+    val authRoleAuthRole: AuthRoleAuthRole
+)
+
+
+data class AuthRoleAuthRole(
+    val authRoleId: Int = 0,
+    val roleName: String = "",
+)
+
+data class CategoryCategory(
+    val categoryId: Int = 0,
+    val categoryName: String = ""
+)
+
+
+data class RentalItemStateRentalItemState(
+    val rentalItemStateId: Int = 0,
+    val rentalItemState: String = ""
+)
+
+
+/* UpdateRentalItemReq data class represents the request body format for the
+editRentalItem API method. It includes rentalItemName property, which is
+serialized as "rental_item_name". The default value for the rentalItemName is
+an empty string.
+ */
+data class UpdateRentalItemReq(
+    @SerializedName("rental_item_name")
+    val rentalItemName: String = ""
+)

@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.inventorymanagementapplication.viewmodel.CategoryEditViewModel
+import com.example.inventorymanagementapplication.viewmodel.RentalItemEditViewModel
 
 
 /* Builds the top bar and the UI for editing a category using the
@@ -36,9 +37,9 @@ is called. When the Back button is pressed, the goBack callback is called.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemEditScreen(goToItems: () -> Unit, goBack: () -> Unit) {
+fun RentalItemEditScreen(/*goToItems: () -> Unit, goBack: () -> Unit*/) {
     // An instance of the CategoryEditViewModel is created:
-    val vm: CategoryEditViewModel = viewModel()
+    val vm: RentalItemEditViewModel = viewModel()
 
     /* The lambda block of LaunchedEffect is executed whenever the value
     of the key1 parameter changes. Then it is checked if the value of the
@@ -46,10 +47,10 @@ fun ItemEditScreen(goToItems: () -> Unit, goBack: () -> Unit) {
     is set back to false and, as a side effect, the callback method
     transmitted as a parameter is called.
     */
-    LaunchedEffect(key1 = vm.categoryState.value.done) {
-        if (vm.categoryState.value.done) {
+    LaunchedEffect(key1 = vm.rentalItemState.value.done) {
+        if (vm.rentalItemState.value.done) {
             vm.setDone(done = false)
-            goToItems()
+            //goToItems()
         }
     }
 
@@ -68,26 +69,26 @@ fun ItemEditScreen(goToItems: () -> Unit, goBack: () -> Unit) {
                 .padding(it)
         ) {
             when {
-                vm.categoryState.value.loading -> CircularProgressIndicator(
+                vm.rentalItemState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
-                vm.categoryState.value.error != null -> Text(text = "Virhe: ${vm.categoryState.value.error.toString()}")
+                vm.rentalItemState.value.error != null -> Text(text = "Virhe: ${vm.rentalItemState.value.error.toString()}")
                 else -> Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     OutlinedTextField(
-                        value = vm.categoryState.value.categoryName,
+                        value = vm.rentalItemState.value.rentalItemName,
                         onValueChange = { newName -> vm.setName(newName) }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Row {
-                        Button(onClick = { vm.editCategory() }) {
+                        Button(onClick = { vm.editRentalItem() }) {
                             Text(text = "Muokkaa")
                         }
                         Spacer(modifier = Modifier.width(8.dp))
-                        Button(onClick = { goBack() }) {
+                        Button(onClick = { /*goBack()*/ }) {
                             Text(text = "Takaisin")
                         }
                     }

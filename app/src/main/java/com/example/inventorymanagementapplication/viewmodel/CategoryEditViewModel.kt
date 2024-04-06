@@ -27,7 +27,7 @@ class CategoryEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     savedStateHandle transmitted as a parameter. If there's no value or it
     cannot be converted to integer, id is set to 0.
     */
-    val id = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
+    private val id = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
 
 
     /* The method inside init lambda is called immediately when an instance

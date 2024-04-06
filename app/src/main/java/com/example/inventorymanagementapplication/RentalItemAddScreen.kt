@@ -1,6 +1,5 @@
 package com.example.inventorymanagementapplication
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,49 +22,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.inventorymanagementapplication.viewmodel.CategoryAddViewModel
+import com.example.inventorymanagementapplication.model.RentalItemState
+import com.example.inventorymanagementapplication.viewmodel.RentalItemAddViewModel
 
-/* Builds the top bar and the UI for adding a category using the
-CategoryAddScreen composable function. Displays a CircularProgressIndicator
-if the loading argument of the categoryState is true. Alternatively if an
-error occurs, an error message is displayed on the screen.
-
-Otherwise, it displays a text field and two adjacent buttons below the field.
-When the add button is pressed, the addCategories method of the vm instance
-is called. When the Back button is pressed, the goBack callback is called.
-*/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryAddScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
-    val vm: CategoryAddViewModel = viewModel()
+fun RentalItemAddScreen(goToRentalItems: (RentalItemState) -> Unit, goBack: () -> Unit) {
+    val vm: RentalItemAddViewModel = viewModel()
 
-    /* The lambda block of LaunchedEffect is executed whenever the value
-    of the key1 parameter changes. If the value of the done argument of the
-    vm instance's state is true, goToCategories callback is called for
-    navigating back to CategoriesScreen composable. Also the done argument
-    is set back to false so that it doesn't stay the same during the
-    execution of the program blocking the implementation of the navigation
-    logic.
-    */
-    LaunchedEffect(key1 = vm.categoryState.value.done) {
-        if (vm.categoryState.value.done) {
-            vm.setDone(false)
-            goToCategories()
+    LaunchedEffect(key1 = vm.rentalItemState.value.done) {
+        if (vm.rentalItemState.value.done) {
+            vm.setDone(done = false)
+            goToRentalItems(vm.rentalItemState.value)
         }
     }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "Lisää kategoria") })
+            TopAppBar(title = { Text(text = "Add rental item") })
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(it)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
             when {
-                vm.categoryState.value.loading -> CircularProgressIndicator(
+                vm.rentalItemState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
 
-                vm.categoryState.value.error != null -> Text(text = "Virhe: ${vm.categoryState.value.error}")
+                vm.rentalItemState.value.error != null ->
+                    Text(text = "Virhe: ${vm.rentalItemState.value.error.toString()}")
 
                 else -> Column(
                     modifier = Modifier.fillMaxSize(),
@@ -73,17 +61,17 @@ fun CategoryAddScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     OutlinedTextField(
-                        value = vm.categoryState.value.categoryName,
+                        value = vm.rentalItemState.value.rentalItemName,
                         onValueChange = { name -> vm.setName(name) }
                     )
                     Spacer(modifier = Modifier.height(height = 16.dp))
                     Row {
-                        Button(onClick = { vm.addCategory() }) {
-                            Text(text = "Lisää")
+                        Button(onClick = { vm.addRentalItem() }) {
+                            Text(text = "Add")
                         }
                         Spacer(modifier = Modifier.width(width = 8.dp))
                         Button(onClick = { goBack() }) {
-                            Text(text = "Takaisin")
+                            Text(text = "Cancel")
                         }
                     }
                 }

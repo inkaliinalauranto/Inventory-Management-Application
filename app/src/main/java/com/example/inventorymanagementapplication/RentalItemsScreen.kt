@@ -34,6 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.inventorymanagementapplication.model.RentalItem
+import com.example.inventorymanagementapplication.model.RentalItemsState
 import com.example.inventorymanagementapplication.viewmodel.RentalItemsViewModel
 
 
@@ -67,6 +69,7 @@ fun ConfirmItemDelete(
     */
     LaunchedEffect(key1 = error) {
         error?.let {
+            println(error)
             Toast.makeText(context, error, Toast.LENGTH_LONG).show()
             clearError()
         }
@@ -88,7 +91,7 @@ fun ConfirmItemDelete(
         icon = {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = "Delete category"
+                contentDescription = "Delete rental item"
             )
         },
         text = {
@@ -98,11 +101,11 @@ fun ConfirmItemDelete(
                         modifier = Modifier.align(Alignment.Center)
                     )
 
-                    else -> Text(text = "Are you sure you want to delete this category?")
+                    else -> Text(text = "Are you sure you want to delete this rental item")
                 }
             }
         },
-        title = { Text(text = "Delete category") },
+        title = { Text(text = "Delete rental item") },
         dismissButton = {
             TextButton(onClick = { onDismiss() }) {
                 Text(text = "Cancel")
@@ -122,18 +125,19 @@ the CategoryAddScreen is implemented through this callback.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RentalItemsScreen(
-//    goToCategoryEdit: (CategoryItem) -> Unit,
+    goToRentalItemEdit: (RentalItem) -> Unit,
+    goToRentalItemAdd: (RentalItemsState) -> Unit,
     goBack: () -> Unit
 ) {
-    // An instance of the CategoriesViewModel is created:
-    val itemsVM: RentalItemsViewModel = viewModel()
+    // An instance of the RentalItemsViewModel is created:
+    val rentalItemsVM: RentalItemsViewModel = viewModel()
 
 
     // Top bar is created insides Scaffold:
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*goToCategoryAdd()*/ }) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Lisää kategoria")
+            FloatingActionButton(onClick = { goToRentalItemAdd(rentalItemsVM.rentalItemsState.value) }) {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add rental item")
             }
         },
         topBar = {
@@ -144,11 +148,11 @@ fun RentalItemsScreen(
                     IconButton(onClick = {
                         goBack()
                     }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Takaisin")
                     }
                 }
             )
-        }) {
+        }) { it ->
         /* The actual content of the screen is created as an implementation
         of the Box composable. When fetching categories, the circular progress
         indicator is shown. Alternatively if any error occurs, an error
@@ -161,12 +165,12 @@ fun RentalItemsScreen(
                 .padding(it)
         ) {
             when {
-                itemsVM.rentalItemsState.value.loading -> CircularProgressIndicator(
+                rentalItemsVM.rentalItemsState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
 
-                itemsVM.rentalItemsState.value.error != null -> Text(
-                    text = "Error: ${itemsVM.rentalItemsState.value.error}"
+                rentalItemsVM.rentalItemsState.value.error != null -> Text(
+                    text = "Error: ${rentalItemsVM.rentalItemsState.value.error}"
                 )
 
                 /* When the trash can icon of a category is clicked, the
@@ -175,17 +179,18 @@ fun RentalItemsScreen(
                 greater than 0, and the ConfirmCategoryDelete confirmation
                 window is displayed.
                 */
-                itemsVM.rentalItemDeleteState.value.id > 0 -> ConfirmCategoryDelete(
-                    loading = itemsVM.rentalItemDeleteState.value.loading,
-                    error = itemsVM.rentalItemDeleteState.value.error,
-                    onDismiss = { /*itemsVM.setDeletableCategoryId(id = 0)*/ },
-                    onConfirm = { /*itemsVM.deleteCategory()*/ },
-                    clearError = { /*itemsVM.clearDeleteError()*/ }
+                rentalItemsVM.rentalItemDeleteState.value.id > 0 -> ConfirmItemDelete(
+                    loading = rentalItemsVM.rentalItemDeleteState.value.loading,
+                    error = rentalItemsVM.rentalItemDeleteState.value.error,
+                    onDismiss = { rentalItemsVM.setDeletableRentalItemId(id = 0) },
+                    onConfirm = { rentalItemsVM.deleteRentalItem() },
+                    clearError = { rentalItemsVM.clearDeleteError() }
                 )
 
                 else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
                     // A single item is referenced as "it":
-                    items(itemsVM.rentalItemsState.value.list) {
+                    items(rentalItemsVM.rentalItemsState.value.list) {
+                        println(it.rentalItemId)
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Row(
                                 modifier = Modifier
@@ -210,13 +215,15 @@ fun RentalItemsScreen(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.End
                                     ) {
-                                        /* When a category's Delete icon button is
-                                        clicked, the category id of the clicked
-                                        category is set into _categoryDeleteState of
-                                        the categoriesVM instance.
+                                        /* When a rental item's Delete icon
+                                        button is clicked, the id of the
+                                        clicked rental item is set into
+                                        _rentalItemDeleteState of
+                                        the rentalItemsVM instance.
                                          */
                                         IconButton(onClick = {
-                                            /*itemsVM.setDeletableCategoryId(it.categoryId)*/
+                                            println("Asetetaan _rentalItemDeleteStatelle id: ${it.rentalItemId}")
+                                            rentalItemsVM.setDeletableRentalItemId(it.rentalItemId)
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Default.Delete,
@@ -224,7 +231,7 @@ fun RentalItemsScreen(
                                             )
                                         }
                                         IconButton(onClick = {
-                                            /*goToCategoryEdit(it)*/
+                                            goToRentalItemEdit(it)
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Default.Edit,

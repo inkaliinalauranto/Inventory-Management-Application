@@ -134,8 +134,9 @@ class MainActivity : ComponentActivity() {
                                     CategoryAddScreen:
                                     */
                                     goToCategoryAdd = { navController.navigate(route = "categoryAddScreen") },
-                                    goToItemList = { categoryItem ->
-                                        navController.navigate(route = "rentalItemsScreen/${categoryItem.categoryId}") }
+                                    goToRentalItemList = { categoryItem ->
+                                        navController.navigate(route = "rentalItemsScreen/${categoryItem.categoryId}")
+                                    }
                                 )
                             }
                             composable(route = "loginScreen") {
@@ -166,10 +167,34 @@ class MainActivity : ComponentActivity() {
                                     goBack = { navController.navigateUp() }
                                 )
                             }
-                            composable(route = "rentalItemsScreen/{categoryId}") {
-                                RentalItemsScreen(
+                            composable(route = "rentalItemAddScreen/{categoryId}") {
+                                RentalItemAddScreen(
+                                    goToRentalItems = {
+                                        navController.navigate(route = "rentalItemsScreen/${it.categoryId}") {
+                                            popUpTo(
+                                                "rentalItemsScreen/${it.categoryId}"
+                                            ) {
+                                                inclusive = true
+                                                saveState = true
+                                            }
+                                        }
+                                    },
                                     goBack = { navController.navigateUp() }
                                 )
+                            }
+                            composable(route = "rentalItemsScreen/{categoryId}") {
+                                RentalItemsScreen(
+                                    goBack = { navController.navigateUp() },
+                                    goToRentalItemEdit = {
+                                        navController.navigate(route = "rentalItemEditScreen/${it.rentalItemId}")
+                                    },
+                                    goToRentalItemAdd = {
+                                        navController.navigate(route = "rentalItemAddScreen/${it.categoryId}")
+                                    }
+                                )
+                            }
+                            composable(route = "rentalItemEditScreen/{rentalItemId}") {
+                                RentalItemEditScreen()
                             }
                         }
                     }
