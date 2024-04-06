@@ -182,19 +182,30 @@ class MainActivity : ComponentActivity() {
                                     goBack = { navController.navigateUp() }
                                 )
                             }
+                            composable(route = "rentalItemEditScreen/{rentalItemId}/{categoryId}") {
+                                RentalItemEditScreen(
+                                    goToItems = {
+                                        navController.navigate(route = "rentalItemsScreen/${it.categoryId}") {
+                                            popUpTo(
+                                                "rentalItemsScreen/${it.categoryId}"
+                                            ) {
+                                                inclusive = true
+                                                saveState = true
+                                            }
+                                        }
+                                    },
+                                    goBack = { navController.navigateUp() })
+                            }
                             composable(route = "rentalItemsScreen/{categoryId}") {
                                 RentalItemsScreen(
                                     goBack = { navController.navigateUp() },
                                     goToRentalItemEdit = {
-                                        navController.navigate(route = "rentalItemEditScreen/${it.rentalItemId}")
+                                        navController.navigate(route = "rentalItemEditScreen/${it.rentalItemId}/${it.categoryId}")
                                     },
                                     goToRentalItemAdd = {
                                         navController.navigate(route = "rentalItemAddScreen/${it.categoryId}")
                                     }
                                 )
-                            }
-                            composable(route = "rentalItemEditScreen/{rentalItemId}") {
-                                RentalItemEditScreen()
                             }
                         }
                     }

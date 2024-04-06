@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.inventorymanagementapplication.model.RentalItem
+import com.example.inventorymanagementapplication.model.RentalItemCategoryState
 import com.example.inventorymanagementapplication.model.RentalItemsState
 import com.example.inventorymanagementapplication.viewmodel.RentalItemsViewModel
 
@@ -125,7 +126,7 @@ the CategoryAddScreen is implemented through this callback.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RentalItemsScreen(
-    goToRentalItemEdit: (RentalItem) -> Unit,
+    goToRentalItemEdit: (RentalItemCategoryState) -> Unit,
     goToRentalItemAdd: (RentalItemsState) -> Unit,
     goBack: () -> Unit
 ) {
@@ -144,7 +145,6 @@ fun RentalItemsScreen(
             TopAppBar(
                 title = { Text("Tavarat") },
                 navigationIcon = {
-                    // Menu icon button:
                     IconButton(onClick = {
                         goBack()
                     }) {
@@ -190,7 +190,6 @@ fun RentalItemsScreen(
                 else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
                     // A single item is referenced as "it":
                     items(rentalItemsVM.rentalItemsState.value.list) {
-                        println(it.rentalItemId)
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Row(
                                 modifier = Modifier
@@ -231,7 +230,8 @@ fun RentalItemsScreen(
                                             )
                                         }
                                         IconButton(onClick = {
-                                            goToRentalItemEdit(it)
+                                            rentalItemsVM.setRentalItemAndCategory(rentalItemId = it.rentalItemId)
+                                            goToRentalItemEdit(rentalItemsVM.rentalItemCategoryState.value)
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Default.Edit,

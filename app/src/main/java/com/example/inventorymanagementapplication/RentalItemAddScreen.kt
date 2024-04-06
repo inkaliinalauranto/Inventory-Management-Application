@@ -9,9 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,7 +43,18 @@ fun RentalItemAddScreen(goToRentalItems: (RentalItemState) -> Unit, goBack: () -
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "Add rental item") })
+            TopAppBar(title = { Text(text = "Add rental item") },
+                      navigationIcon = {
+                          // Menu icon button:
+                          IconButton(onClick = {
+                              goBack()
+                          }) {
+                              Icon(
+                                  imageVector = Icons.Default.ArrowBack,
+                                  contentDescription = "Takaisin"
+                              )
+                          }
+                      })
         }
     ) {
         Box(

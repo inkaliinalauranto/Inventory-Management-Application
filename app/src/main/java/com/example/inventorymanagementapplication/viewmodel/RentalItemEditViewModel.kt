@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.api.categoriesService
 import com.example.inventorymanagementapplication.model.RentalItemState
-import com.example.inventorymanagementapplication.model.UpdateCategoryReq
 import com.example.inventorymanagementapplication.model.UpdateRentalItemReq
 import kotlinx.coroutines.launch
 
@@ -28,8 +27,9 @@ class RentalItemEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() 
     savedStateHandle transmitted as a parameter. If there's no value or it
     cannot be converted to integer, id is set to 0.
     */
-    private val id = savedStateHandle.get<String>("rentalItemId")?.toIntOrNull() ?: 0
+    private val rentalItemId = savedStateHandle.get<String>("rentalItemId")?.toIntOrNull() ?: 0
 
+    private val categoryId = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
 
     /* The method inside init lambda is called immediately when an instance
     of this class is created:
@@ -52,7 +52,7 @@ class RentalItemEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() 
         try {
             viewModelScope.launch {
                 _rentalItemState.value = _rentalItemState.value.copy(loading = true)
-                val response = categoriesService.getRentalItemById(id)
+                val response = categoriesService.getRentalItemById(rentalItemId)
                 _rentalItemState.value =
                     _rentalItemState.value.copy(rentalItemName = response.rentalItemName)
             }
@@ -93,8 +93,10 @@ class RentalItemEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() 
         viewModelScope.launch {
             try {
                 _rentalItemState.value = _rentalItemState.value.copy(loading = true)
+                _rentalItemState.value = _rentalItemState.value.copy(categoryId = categoryId)
+                println("KATEGORIA EDIT! $categoryId")
                 categoriesService.editRentalItem(
-                    id,
+                    rentalItemId,
                     UpdateRentalItemReq(rentalItemName = _rentalItemState.value.rentalItemName)
                 )
                 setDone(done = true)

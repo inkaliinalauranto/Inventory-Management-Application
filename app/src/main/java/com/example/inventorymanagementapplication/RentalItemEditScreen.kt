@@ -9,9 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.inventorymanagementapplication.model.RentalItemState
 import com.example.inventorymanagementapplication.viewmodel.CategoryEditViewModel
 import com.example.inventorymanagementapplication.viewmodel.RentalItemEditViewModel
 
@@ -37,7 +42,7 @@ is called. When the Back button is pressed, the goBack callback is called.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RentalItemEditScreen(/*goToItems: () -> Unit, goBack: () -> Unit*/) {
+fun RentalItemEditScreen(goToItems: (RentalItemState) -> Unit, goBack: () -> Unit) {
     // An instance of the CategoryEditViewModel is created:
     val vm: RentalItemEditViewModel = viewModel()
 
@@ -50,7 +55,7 @@ fun RentalItemEditScreen(/*goToItems: () -> Unit, goBack: () -> Unit*/) {
     LaunchedEffect(key1 = vm.rentalItemState.value.done) {
         if (vm.rentalItemState.value.done) {
             vm.setDone(done = false)
-            //goToItems()
+            goToItems(vm.rentalItemState.value)
         }
     }
 
@@ -58,7 +63,14 @@ fun RentalItemEditScreen(/*goToItems: () -> Unit, goBack: () -> Unit*/) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Muokkaa kategorian nimeä")
+                    Text(text = "Muokkaa tavaran nimeä")
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        goBack()
+                    }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Takaisin")
+                    }
                 }
             )
         }
@@ -88,7 +100,7 @@ fun RentalItemEditScreen(/*goToItems: () -> Unit, goBack: () -> Unit*/) {
                             Text(text = "Muokkaa")
                         }
                         Spacer(modifier = Modifier.width(8.dp))
-                        Button(onClick = { /*goBack()*/ }) {
+                        Button(onClick = { goBack() }) {
                             Text(text = "Takaisin")
                         }
                     }

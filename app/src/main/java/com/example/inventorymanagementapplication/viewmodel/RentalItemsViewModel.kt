@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.api.categoriesService
+import com.example.inventorymanagementapplication.model.RentalItemCategoryState
 import com.example.inventorymanagementapplication.model.RentalItemDeleteState
 import com.example.inventorymanagementapplication.model.RentalItemsState
 import kotlinx.coroutines.launch
@@ -13,6 +14,10 @@ import kotlinx.coroutines.launch
 class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val id = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
+
+    private val _rentalItemCategoryState = mutableStateOf(RentalItemCategoryState())
+
+    val rentalItemCategoryState: State<RentalItemCategoryState> = _rentalItemCategoryState
 
     /* The private attribute of the class representing the current rental
     items state:
@@ -105,6 +110,11 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
                 _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(loading = false)
             }
         }
+    }
+
+
+    fun setRentalItemAndCategory(rentalItemId: Int) {
+        _rentalItemCategoryState.value = _rentalItemCategoryState.value.copy(categoryId = id, rentalItemId = rentalItemId)
     }
 
 

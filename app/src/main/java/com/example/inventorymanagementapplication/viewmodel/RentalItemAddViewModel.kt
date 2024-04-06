@@ -31,6 +31,7 @@ class RentalItemAddViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
             try {
                 _rentalItemState.value = _rentalItemState.value.copy(loading = true)
                 _rentalItemState.value = _rentalItemState.value.copy(categoryId = categoryId)
+                println("KATEGORIA ADD! $categoryId")
                 categoriesService.addRentalItem(
                     categoryId = categoryId,
                     AddRentalItemReq(

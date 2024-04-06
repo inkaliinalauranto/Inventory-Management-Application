@@ -124,6 +124,12 @@ data class RentalItem(
 )
 
 
+data class RentalItemCategoryState(
+    val categoryId: Int = 0,
+    val rentalItemId: Int = 0
+)
+
+
 // A data class for saving the id of the rental item to be removed:
 data class RentalItemDeleteState(
     val id: Int = 0,
@@ -146,36 +152,52 @@ class. The rentalItem property of this structure is in the form of the
 RentalItem data class object.
  */
 data class RentalItemRes(
+    @SerializedName("rental_item_id")
     val rentalItemId: Int = 0,
+    @SerializedName("created_by_user")
     val createdByUser: CreatedByUser,
+    @SerializedName("category_category")
     val categoryCategory: CategoryCategory,
+    @SerializedName("rental_item_name")
     val rentalItemName: String = "",
+    @SerializedName("created_at")
     val createdAt: String = "",
+    @SerializedName("rental_item_state_rental_item_state")
     val rentalItemStateRentalItemState: RentalItemStateRentalItemState,
+    @SerializedName("deleted_at")
     val deletedAt: String? = null
 )
 
 
 data class CreatedByUser(
+    @SerializedName("auth_user_id")
     val authUserId: Int = 0,
+    @SerializedName("username")
     val username: String = "",
+    @SerializedName("auth_role_auth_role")
     val authRoleAuthRole: AuthRoleAuthRole
 )
 
 
 data class AuthRoleAuthRole(
+    @SerializedName("auth_role_id")
     val authRoleId: Int = 0,
+    @SerializedName("role_name")
     val roleName: String = "",
 )
 
 data class CategoryCategory(
+    @SerializedName("category_id")
     val categoryId: Int = 0,
+    @SerializedName("category_name")
     val categoryName: String = ""
 )
 
 
 data class RentalItemStateRentalItemState(
+    @SerializedName("rental_item_state_id")
     val rentalItemStateId: Int = 0,
+    @SerializedName("rental_item_state")
     val rentalItemState: String = ""
 )
 
