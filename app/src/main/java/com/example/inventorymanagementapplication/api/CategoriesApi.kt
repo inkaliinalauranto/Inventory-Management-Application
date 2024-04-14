@@ -1,7 +1,10 @@
 package com.example.inventorymanagementapplication.api
 
+import com.example.inventorymanagementapplication.model.AccountRes
 import com.example.inventorymanagementapplication.model.AddCategoryReq
 import com.example.inventorymanagementapplication.model.AddRentalItemReq
+import com.example.inventorymanagementapplication.model.AuthReq
+import com.example.inventorymanagementapplication.model.AuthRes
 import com.example.inventorymanagementapplication.model.CategoriesRes
 import com.example.inventorymanagementapplication.model.CategoryRes
 import com.example.inventorymanagementapplication.model.RentalItemRes
@@ -12,6 +15,7 @@ import com.example.inventorymanagementapplication.model.UpdateRentalItemReq
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -26,6 +30,15 @@ val categoriesService: CategoriesApi = retrofit.create(CategoriesApi::class.java
 
 
 interface CategoriesApi {
+    @GET("auth/account")
+    suspend fun getAccount(@Header("Authorization") bearerToken: String): AccountRes
+
+    @POST("auth/logout")
+    suspend fun logout(@Header("Authorization") bearerToken: String)
+
+    @POST("auth/login")
+    suspend fun login(@Body req: AuthReq): AuthRes
+
     /* An API-method that fetches all category items from
     http://10.0.2.2:8000/api/v1/category. It returns a CategoriesRes
     data class object.

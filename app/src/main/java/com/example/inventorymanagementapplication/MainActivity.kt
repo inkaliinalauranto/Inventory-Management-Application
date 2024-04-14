@@ -1,6 +1,7 @@
 package com.example.inventorymanagementapplication
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Spacer
@@ -20,15 +21,19 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.inventorymanagementapplication.ui.theme.InventoryManagementApplicationTheme
+import com.example.inventorymanagementapplication.viewmodel.LogoutViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -41,8 +46,30 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val logoutViewModel: LogoutViewModel = viewModel()
                     // Controller for navigation:
                     val navController = rememberNavController()
+                    val context = LocalContext.current
+
+                    LaunchedEffect(key1 = logoutViewModel.logoutState.value.error) {
+                        // let tekee oman scopin, joten errorin merkkijono on itissä
+                        // if error != null
+                        logoutViewModel.logoutState.value.error?.let {
+                            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                    LaunchedEffect(key1 = logoutViewModel.logoutState.value.logoutOk) {
+                        if (logoutViewModel.logoutState.value.logoutOk) {
+                            logoutViewModel.setLogout(ok = false)
+                            navController.navigate(route = "loginScreen") {
+                                // Jätetään ainoastaan nykyinen sivu
+                                popUpTo(route = "loginScreen") {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    }
                     /* A variable that defines the status (open/closed) of the
                     drawer:
                      */
@@ -56,6 +83,8 @@ class MainActivity : ComponentActivity() {
                     screen view:
                     */
                     ModalNavigationDrawer(
+                        // Deactivate side swipe:
+                        gesturesEnabled = false,
                         drawerState = drawerState,
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         drawerContent = {
@@ -90,13 +119,13 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                                 NavigationDrawerItem(
-                                    label = { Text(text = "Login") },
+                                    label = { Text(text = "Logout") },
                                     selected = route == "loginScreen",
                                     onClick = {
-                                        navController.navigate(route = "loginScreen")
                                         scope.launch {
                                             drawerState.close()
                                         }
+                                        logoutViewModel.logout()
                                     },
                                     icon = {
                                         Icon(
@@ -141,10 +170,8 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(route = "loginScreen") {
                                 LoginScreen(
-                                    onMenuClick = {
-                                        scope.launch {
-                                            drawerState.open()
-                                        }
+                                    goToCategories = {
+                                        navController.navigate(route = "categoriesScreen")
                                     },
                                     onLoginClick = {
                                         navController.navigate(route = "categoriesScreen")

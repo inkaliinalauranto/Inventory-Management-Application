@@ -1,6 +1,5 @@
 package com.example.inventorymanagementapplication.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,10 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.api.categoriesService
 import com.example.inventorymanagementapplication.model.CategoriesState
 import com.example.inventorymanagementapplication.model.CategoryDeleteState
-import com.example.inventorymanagementapplication.model.CategoryItem
 import kotlinx.coroutines.launch
 
-class CategoriesViewModel : ViewModel() {
+class CategoriesViewModel() : ViewModel() {
     /* The private attribute of the class representing the current categories
     state:
     */

@@ -1,5 +1,7 @@
 package com.example.inventorymanagementapplication
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,19 +10,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,22 +43,44 @@ When the button is pressed, callback function are called.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(onMenuClick: () -> Unit, onLoginClick: () -> Unit) {
+fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit) {
+    val loginVM: LoginViewModel = viewModel()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = loginVM.loginState.value.error) {
+        loginVM.loginState.value.error?.let {
+            Toast.makeText(context, loginVM.loginState.value.error, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    LaunchedEffect(key1 = loginVM.loginState.value.loginOk) {
+        if (loginVM.loginState.value.loginOk) {
+            loginVM.setLogin(ok = false)
+            onLoginClick()
+        }
+    }
+
+    LaunchedEffect(key1 = loginVM.loginState.value.accountId) {
+        Log.d("Juhani", "LoginScreen -> Tili-ID: ${loginVM.loginState.value.accountId }")
+        if (loginVM.loginState.value.accountId > 0) {
+            loginVM.setAccountId(id = 0)
+            goToCategories()
+        }
+    }
+
     Scaffold(topBar = {
         TopAppBar(
             navigationIcon = {
-                IconButton(onClick = {
-                    onMenuClick()
-                }) {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-                }
+                Icon(imageVector = Icons.Default.Lock, contentDescription = "Login")
             },
             title = { Text("Login") }
         )
     }) {
-        val loginVM: LoginViewModel = viewModel()
-        Box(modifier = Modifier.fillMaxSize().padding(it)) {
-
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
             when {
                 loginVM.loginState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(
@@ -93,7 +118,6 @@ fun LoginScreen(onMenuClick: () -> Unit, onLoginClick: () -> Unit) {
                         enabled = loginVM.loginState.value.username != "" && loginVM.loginState.value.password != "",
                         onClick = {
                             loginVM.login()
-                            onLoginClick()
                         }) {
                         Text(text = "Login")
                     }

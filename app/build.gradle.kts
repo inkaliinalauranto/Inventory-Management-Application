@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    // Added for room database:
+    id("kotlin-kapt")
 }
 
 android {
@@ -50,6 +52,10 @@ android {
 }
 
 dependencies {
+    // The first three kapt/implementations are for room database:
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-common:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
     // Added for navigation:
     implementation("androidx.navigation:navigation-compose:2.7.7")
     // The first two implementation below are for REST API:

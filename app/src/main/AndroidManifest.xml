@@ -7,7 +7,10 @@
 
     <!-- Setting the usesCleartextTraffic attribute to true, unsecured
      HTTP connection is allowed: -->
+    <!-- The Android Application class is overridden with the custom
+    application class. -->
     <application
+        android:name=".CustomApp"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
