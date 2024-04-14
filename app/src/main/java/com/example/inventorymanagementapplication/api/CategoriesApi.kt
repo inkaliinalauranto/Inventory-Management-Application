@@ -30,6 +30,9 @@ val categoriesService: CategoriesApi = retrofit.create(CategoriesApi::class.java
 
 
 interface CategoriesApi {
+    @POST("auth/register")
+    suspend fun register(@Body req: AuthReq)
+
     @GET("auth/account")
     suspend fun getAccount(@Header("Authorization") bearerToken: String): AccountRes
 

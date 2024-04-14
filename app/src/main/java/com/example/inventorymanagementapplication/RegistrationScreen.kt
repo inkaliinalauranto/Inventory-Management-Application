@@ -1,6 +1,5 @@
 package com.example.inventorymanagementapplication
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,15 +9,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,7 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.inventorymanagementapplication.viewmodel.LoginViewModel
+import com.example.inventorymanagementapplication.viewmodel.RegistrationViewModel
 
 
 /* Builds top bar with navigation icon. When clicked, the callback function
@@ -44,37 +43,25 @@ When the button is pressed, callback function are called.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegistrationScreen: () -> Unit) {
-    val loginVM: LoginViewModel = viewModel()
+fun RegistrationScreen(goBack: () -> Unit, onRegistrationClick: () -> Unit) {
+    val registrationVM: RegistrationViewModel = viewModel()
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = loginVM.loginState.value.error) {
-        loginVM.loginState.value.error?.let {
-            Toast.makeText(context, loginVM.loginState.value.error, Toast.LENGTH_LONG).show()
+    LaunchedEffect(key1 = registrationVM.registrationState.value.error) {
+        registrationVM.registrationState.value.error?.let {
+            Toast.makeText(context, registrationVM.registrationState.value.error, Toast.LENGTH_LONG).show()
         }
     }
 
-    LaunchedEffect(key1 = loginVM.loginState.value.loginOk) {
-        if (loginVM.loginState.value.loginOk) {
-            loginVM.setLogin(ok = false)
-            onLoginClick()
-        }
-    }
-
-    LaunchedEffect(key1 = loginVM.loginState.value.accountId) {
-        Log.d("Juhani", "LoginScreen -> Tili-ID: ${loginVM.loginState.value.accountId }")
-        if (loginVM.loginState.value.accountId > 0) {
-            loginVM.setAccountId(id = 0)
-            goToCategories()
-        }
-    }
 
     Scaffold(topBar = {
         TopAppBar(
             navigationIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "Login")
+                IconButton(onClick = { goBack() }) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Registration")
+                }
             },
-            title = { Text("Login") }
+            title = { Text("Register") }
         )
     }) {
         Box(
@@ -83,7 +70,7 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
                 .padding(it)
         ) {
             when {
-                loginVM.loginState.value.loading -> CircularProgressIndicator(
+                registrationVM.registrationState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(
                         Alignment.Center
                     )
@@ -95,9 +82,9 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     OutlinedTextField(
-                        value = loginVM.loginState.value.username,
+                        value = registrationVM.registrationState.value.username,
                         onValueChange = {
-                            loginVM.setUsername(it)
+                            registrationVM.setUsername(it)
                         },
                         placeholder = {
                             Text(text = "Username")
@@ -106,9 +93,9 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
                     Spacer(modifier = Modifier.height(16.dp))
                     OutlinedTextField(
                         visualTransformation = PasswordVisualTransformation(),
-                        value = loginVM.loginState.value.password,
+                        value = registrationVM.registrationState.value.password,
                         onValueChange = {
-                            loginVM.setPassword(it)
+                            registrationVM.setPassword(it)
                         },
                         placeholder = {
                             Text(text = "Password")
@@ -116,16 +103,12 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        enabled = loginVM.loginState.value.username != "" && loginVM.loginState.value.password != "",
+                        enabled = registrationVM.registrationState.value.username != "" && registrationVM.registrationState.value.password != "",
                         onClick = {
-                            loginVM.login()
+                            registrationVM.register()
+                            onRegistrationClick()
                         }) {
-                        Text(text = "Login")
-                    }
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text(text = "Don't have an account?")
-                    TextButton(onClick = { goToRegistrationScreen() }) {
-                        Text(text = "Register here")
+                        Text(text = "Register")
                     }
                 }
             }

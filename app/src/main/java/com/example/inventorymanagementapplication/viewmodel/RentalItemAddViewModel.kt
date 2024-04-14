@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.api.categoriesService
 import com.example.inventorymanagementapplication.model.AddRentalItemReq
 import com.example.inventorymanagementapplication.model.RentalItemState
-import com.example.inventorymanagementapplication.model.RentalItemsState
 import kotlinx.coroutines.launch
 
 class RentalItemAddViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -31,7 +30,6 @@ class RentalItemAddViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
             try {
                 _rentalItemState.value = _rentalItemState.value.copy(loading = true)
                 _rentalItemState.value = _rentalItemState.value.copy(categoryId = categoryId)
-                println("KATEGORIA ADD! $categoryId")
                 categoriesService.addRentalItem(
                     categoryId = categoryId,
                     AddRentalItemReq(

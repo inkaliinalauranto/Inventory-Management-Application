@@ -32,3 +32,10 @@ data class LogoutState(
     val error: String? = null,
     val logoutOk: Boolean = false
 )
+
+data class RegistrationState(
+    val loading: Boolean = false,
+    val error: String? = null,
+    val username: String = "",
+    val password: String = ""
+)

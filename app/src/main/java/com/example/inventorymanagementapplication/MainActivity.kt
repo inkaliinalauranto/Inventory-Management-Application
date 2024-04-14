@@ -175,6 +175,19 @@ class MainActivity : ComponentActivity() {
                                     },
                                     onLoginClick = {
                                         navController.navigate(route = "categoriesScreen")
+                                    },
+                                    goToRegistrationScreen = {
+                                        navController.navigate(route = "registrationScreen")
+                                    }
+                                )
+                            }
+                            composable(route = "registrationScreen") {
+                                RegistrationScreen(
+                                    onRegistrationClick = {
+                                        navController.navigate(route = "loginScreen")
+                                    },
+                                    goBack = {
+                                        navController.navigateUp()
                                     }
                                 )
                             }
