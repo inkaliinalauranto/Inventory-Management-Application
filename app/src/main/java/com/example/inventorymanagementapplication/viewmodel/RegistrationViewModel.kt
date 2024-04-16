@@ -11,7 +11,8 @@ import com.example.inventorymanagementapplication.model.RegistrationState
 import kotlinx.coroutines.launch
 
 class RegistrationViewModel : ViewModel() {
-    private val _registrationState: MutableState<RegistrationState> = mutableStateOf(RegistrationState())
+    private val _registrationState: MutableState<RegistrationState> =
+        mutableStateOf(RegistrationState())
     val registrationState: State<RegistrationState> = _registrationState
 
     fun setUsername(newUsername: String) {
@@ -26,7 +27,12 @@ class RegistrationViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 _registrationState.value = _registrationState.value.copy(loading = true)
-                categoriesService.register(req = AuthReq(username = _registrationState.value.username, password = _registrationState.value.password))
+                categoriesService.register(
+                    req = AuthReq(
+                        username = _registrationState.value.username,
+                        password = _registrationState.value.password
+                    )
+                )
             } catch (e: Exception) {
                 _registrationState.value = _registrationState.value.copy(error = e.toString())
             } finally {
