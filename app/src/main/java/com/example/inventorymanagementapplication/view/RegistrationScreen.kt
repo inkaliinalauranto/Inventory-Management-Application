@@ -1,4 +1,4 @@
-package com.example.inventorymanagementapplication
+package com.example.inventorymanagementapplication.view
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement

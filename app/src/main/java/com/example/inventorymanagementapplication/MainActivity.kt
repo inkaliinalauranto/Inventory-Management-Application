@@ -33,6 +33,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.inventorymanagementapplication.ui.theme.InventoryManagementApplicationTheme
+import com.example.inventorymanagementapplication.view.CategoriesScreen
+import com.example.inventorymanagementapplication.view.CategoryAddScreen
+import com.example.inventorymanagementapplication.view.CategoryEditScreen
+import com.example.inventorymanagementapplication.view.LoginScreen
+import com.example.inventorymanagementapplication.view.RegistrationScreen
+import com.example.inventorymanagementapplication.view.RentalItemAddScreen
+import com.example.inventorymanagementapplication.view.RentalItemEditScreen
+import com.example.inventorymanagementapplication.view.RentalItemsScreen
 import com.example.inventorymanagementapplication.viewmodel.LogoutViewModel
 import kotlinx.coroutines.launch
 
@@ -43,7 +51,7 @@ class MainActivity : ComponentActivity() {
             InventoryManagementApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().padding(NavigationDrawerItemDefaults.ItemPadding),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val logoutViewModel: LogoutViewModel = viewModel()
@@ -84,9 +92,9 @@ class MainActivity : ComponentActivity() {
                     */
                     ModalNavigationDrawer(
                         // Deactivate side swipe:
-                        gesturesEnabled = false,
+                        gesturesEnabled = (route != "loginScreen" && route != "registrationScreen"),
                         drawerState = drawerState,
-                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+//                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         drawerContent = {
                             ModalDrawerSheet {
                                 Spacer(modifier = Modifier.height(16.dp))

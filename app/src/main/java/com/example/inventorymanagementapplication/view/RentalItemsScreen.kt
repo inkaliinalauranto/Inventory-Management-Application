@@ -1,4 +1,4 @@
-package com.example.inventorymanagementapplication
+package com.example.inventorymanagementapplication.view
 
 import android.content.Context
 import android.widget.Toast
@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.inventorymanagementapplication.model.RentalItem
 import com.example.inventorymanagementapplication.model.RentalItemCategoryState
 import com.example.inventorymanagementapplication.model.RentalItemsState
 import com.example.inventorymanagementapplication.viewmodel.RentalItemsViewModel

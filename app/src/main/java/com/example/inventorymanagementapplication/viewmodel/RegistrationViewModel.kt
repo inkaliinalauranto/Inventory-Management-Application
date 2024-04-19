@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.inventorymanagementapplication.api.authorizationService
 import com.example.inventorymanagementapplication.api.categoriesService
 import com.example.inventorymanagementapplication.model.AuthReq
 import com.example.inventorymanagementapplication.model.RegistrationState
@@ -27,7 +28,7 @@ class RegistrationViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 _registrationState.value = _registrationState.value.copy(loading = true)
-                categoriesService.register(
+                authorizationService.register(
                     req = AuthReq(
                         username = _registrationState.value.username,
                         password = _registrationState.value.password

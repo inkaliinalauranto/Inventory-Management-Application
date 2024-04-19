@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.AccountDatabase
 import com.example.inventorymanagementapplication.AccountEntity
 import com.example.inventorymanagementapplication.DbProvider
-import com.example.inventorymanagementapplication.api.categoriesService
+import com.example.inventorymanagementapplication.api.authorizationService
 import com.example.inventorymanagementapplication.model.AuthReq
 import com.example.inventorymanagementapplication.model.LoginState
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMode
                 val accessToken = db.accountDao().getToken()
                 Log.d("Juhani", "LoginViewModel -> accessToken: $accessToken ja authUserId: ${_loginState.value.accountId}")
                 accessToken?.let {
-                    val res = categoriesService.getAccount(bearerToken = "Bearer $it")
+                    val res = authorizationService.getAccount(bearerToken = "Bearer $it")
                     _loginState.value = _loginState.value.copy(accountId = res.authUserId)
                 }
             } catch (e: Exception) {
@@ -64,7 +64,7 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMode
         viewModelScope.launch {
             try {
                 _loginState.value = _loginState.value.copy(loading = true)
-                val response = categoriesService.login(
+                val response = authorizationService.login(
                     req = AuthReq(
                         username = _loginState.value.username,
                         password = _loginState.value.password

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.AccountDatabase
 import com.example.inventorymanagementapplication.DbProvider
 import com.example.inventorymanagementapplication.api.categoriesService
+import com.example.inventorymanagementapplication.api.rentalItemsService
 import com.example.inventorymanagementapplication.model.AddRentalItemReq
 import com.example.inventorymanagementapplication.model.RentalItemState
 import kotlinx.coroutines.launch
@@ -24,8 +25,8 @@ class RentalItemAddViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            //val accessToken = db.accountDao().getToken()
-            //println(accessToken)
+            val accessToken = DbProvider.db.accountDao().getToken()
+            println(accessToken)
         }
     }
 
@@ -42,7 +43,7 @@ class RentalItemAddViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
             try {
                 _rentalItemState.value = _rentalItemState.value.copy(loading = true)
                 _rentalItemState.value = _rentalItemState.value.copy(categoryId = categoryId)
-                categoriesService.addRentalItem(
+                rentalItemsService.addRentalItem(
                     categoryId = categoryId,
                     AddRentalItemReq(
                         rentalItemName = _rentalItemState.value.rentalItemName,

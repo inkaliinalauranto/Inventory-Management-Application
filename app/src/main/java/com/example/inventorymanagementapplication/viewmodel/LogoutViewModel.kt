@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.AccountDatabase
 import com.example.inventorymanagementapplication.DbProvider
+import com.example.inventorymanagementapplication.api.authorizationService
 import com.example.inventorymanagementapplication.api.categoriesService
 import com.example.inventorymanagementapplication.model.LogoutState
 import kotlinx.coroutines.launch
@@ -25,7 +26,7 @@ class LogoutViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMod
                 val accessToken = db.accountDao().getToken()
                 // If accessToken != null
                 accessToken?.let {
-                    categoriesService.logout(bearerToken = "Bearer $it")
+                    authorizationService.logout(bearerToken = "Bearer $it")
                     db.accountDao().removeTokens()
                     setLogout(ok = true)
                 }

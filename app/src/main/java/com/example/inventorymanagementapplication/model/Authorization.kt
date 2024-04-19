@@ -2,6 +2,18 @@ package com.example.inventorymanagementapplication.model
 
 import com.google.gson.annotations.SerializedName
 
+data class RegistrationState(
+    val loading: Boolean = false,
+    val error: String? = null,
+    val username: String = "",
+    val password: String = ""
+)
+
+data class AuthReq(
+    val username: String = "",
+    val password: String = ""
+)
+
 // The data i.e. the model part of MVVM:
 data class LoginState(
     val username: String = "",
@@ -12,19 +24,9 @@ data class LoginState(
     val accountId: Int = 0
 )
 
-data class AuthReq(
-    val username: String = "",
-    val password: String = ""
-)
-
 data class AuthRes(
     @SerializedName("access_token")
     val accessToken: String = ""
-)
-
-data class AccountRes(
-    @SerializedName("auth_user_id")
-    val authUserId: Int = 0
 )
 
 data class LogoutState(
@@ -33,9 +35,7 @@ data class LogoutState(
     val logoutOk: Boolean = false
 )
 
-data class RegistrationState(
-    val loading: Boolean = false,
-    val error: String? = null,
-    val username: String = "",
-    val password: String = ""
+data class AccountRes(
+    @SerializedName("auth_user_id")
+    val authUserId: Int = 0
 )

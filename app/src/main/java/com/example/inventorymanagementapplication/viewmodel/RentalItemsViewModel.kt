@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inventorymanagementapplication.api.categoriesService
+import com.example.inventorymanagementapplication.api.rentalItemsService
 import com.example.inventorymanagementapplication.model.RentalItemCategoryState
 import com.example.inventorymanagementapplication.model.RentalItemDeleteState
 import com.example.inventorymanagementapplication.model.RentalItemsState
@@ -63,7 +64,7 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             try {
                 _rentalItemsState.value = _rentalItemsState.value.copy(loading = true)
-                val rentalItemsRes = categoriesService.getRentalItemsByCategoryId(id)
+                val rentalItemsRes = rentalItemsService.getRentalItemsByCategoryId(id)
                 _rentalItemsState.value =
                     _rentalItemsState.value.copy(list = rentalItemsRes.items)
                 _rentalItemsState.value = _rentalItemsState.value.copy(categoryId = id)
@@ -98,7 +99,7 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             try {
                 _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(loading = true)
-                categoriesService.removeRentalItem(_rentalItemDeleteState.value.id)
+                rentalItemsService.removeRentalItem(_rentalItemDeleteState.value.id)
                 val categories = _rentalItemsState.value.list.filter {
                     it.rentalItemId != _rentalItemDeleteState.value.id
                 }

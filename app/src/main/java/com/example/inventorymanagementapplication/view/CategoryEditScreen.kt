@@ -1,6 +1,5 @@
-package com.example.inventorymanagementapplication
+package com.example.inventorymanagementapplication.view
 
-import android.graphics.Paint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

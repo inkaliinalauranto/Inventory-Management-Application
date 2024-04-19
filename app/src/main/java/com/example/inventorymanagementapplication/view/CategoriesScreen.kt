@@ -1,4 +1,4 @@
-package com.example.inventorymanagementapplication
+package com.example.inventorymanagementapplication.view
 
 import android.content.Context
 import android.widget.Toast
