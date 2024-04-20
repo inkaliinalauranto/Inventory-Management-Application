@@ -32,29 +32,39 @@ import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.viewmodel.LoginViewModel
 
 
-/* Builds top bar with navigation icon. When clicked, the callback function
-provided as an argument (drawerState.open()) is called.
-
-Builds the UI for the login screen using the LoginScreen composable
+/* Builds the UI for the login screen using the LoginScreen composable
 function. Displays a CircularProgressIndicator if the loading argument of
 the loginState is true. Otherwise displays two text fields and a Login
 button. The text in the last text field is masked for security. The button
 can be pressed when there's text in both fields.
 
-When the button is pressed, callback function are called.
+When the button is pressed, its callback function is called. If the
+registration text button is pressed, its callback function is called.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegistrationScreen: () -> Unit) {
+fun LoginScreen(
+    goToCategories: () -> Unit,
+    onLoginClick: () -> Unit,
+    goToRegistrationScreen: () -> Unit
+) {
     val loginVM: LoginViewModel = viewModel()
     val context = LocalContext.current
 
+    /* If login is not successful, the error of the login state won't be
+    null and the error message is shown in a Toast.
+     */
     LaunchedEffect(key1 = loginVM.loginState.value.error) {
         loginVM.loginState.value.error?.let {
             Toast.makeText(context, loginVM.loginState.value.error, Toast.LENGTH_LONG).show()
+            loginVM.clearLoginError()
         }
     }
 
+    /* If login is successful, onLoginClick callback is called, and the
+    navigation to the CategoriesScreen is implemented (which is defined
+    in the MainActivity).
+    */
     LaunchedEffect(key1 = loginVM.loginState.value.loginOk) {
         if (loginVM.loginState.value.loginOk) {
             loginVM.setLogin(ok = false)
@@ -62,6 +72,10 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
         }
     }
 
+    /* If the accountId already exists in the database, i.e. the user is
+    logged in, the navigation to the CategoriesScreen is executed straight
+    away.
+    */
     LaunchedEffect(key1 = loginVM.loginState.value.accountId) {
         if (loginVM.loginState.value.accountId > 0) {
             loginVM.setAccountId(id = 0)
@@ -116,7 +130,8 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        enabled = loginVM.loginState.value.username != "" && loginVM.loginState.value.password != "",
+                        enabled = loginVM.loginState.value.username != "" &&
+                                loginVM.loginState.value.password != "",
                         onClick = {
                             loginVM.login()
                         }) {

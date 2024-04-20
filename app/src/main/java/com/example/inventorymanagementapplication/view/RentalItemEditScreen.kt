@@ -32,19 +32,22 @@ import com.example.inventorymanagementapplication.model.RentalItemState
 import com.example.inventorymanagementapplication.viewmodel.RentalItemEditViewModel
 
 
-/* Builds the top bar and the UI for editing a category using the
-CategoryEditScreen composable function. Displays a CircularProgressIndicator
-if the loading argument of the categoryState is true. Alternatively if an
+/* Builds the top bar and the UI for editing a rental item using the
+RentalItemEditScreen composable function. Displays a CircularProgressIndicator
+if the loading argument of the rentalItemState is true. Alternatively if an
 error occurs, an error message is displayed on the screen.
 
-Otherwise, it displays a text field and two adjacent buttons below the field.
-When the Edit button is pressed, the editCategories method of the vm instance
+Otherwise, displays a text field and two adjacent buttons below the field.
+When the Edit button is pressed, the editRentalItem method of the vm instance
 is called. When the Back button is pressed, the goBack callback is called.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RentalItemEditScreen(goToItems: (RentalItemState) -> Unit, goBack: () -> Unit) {
-    // An instance of the CategoryEditViewModel is created:
+fun RentalItemEditScreen(
+    goToRentalItems: (RentalItemState) -> Unit,
+    goBack: () -> Unit
+) {
+    // An instance of the RentalItemEditViewModel is created:
     val vm: RentalItemEditViewModel = viewModel()
 
     /* The lambda block of LaunchedEffect is executed whenever the value
@@ -56,7 +59,7 @@ fun RentalItemEditScreen(goToItems: (RentalItemState) -> Unit, goBack: () -> Uni
     LaunchedEffect(key1 = vm.rentalItemState.value.done) {
         if (vm.rentalItemState.value.done) {
             vm.setDone(done = false)
-            goToItems(vm.rentalItemState.value)
+            goToRentalItems(vm.rentalItemState.value)
         }
     }
 

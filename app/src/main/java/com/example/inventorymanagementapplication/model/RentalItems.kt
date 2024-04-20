@@ -2,17 +2,25 @@ package com.example.inventorymanagementapplication.model
 
 import com.google.gson.annotations.SerializedName
 
+// RentalItemState and its properties with default values:
 data class RentalItemState(
+    /* categoryId is needed, when navigation back from RentalItemAddScreen
+    to RentalItemsScreen. categoryId property defines the parent category
+    of RentalItemsScreen.
+     */
     val categoryId: Int = 0,
     val rentalItemName: String = "",
     val loading: Boolean = false,
     val error: String? = null,
-    /* The value transform of this property is used in LaunchedEffect of
-    the CategoryEditScreen component.
+    /* The transform of this property's value is used in LaunchedEffect in
+    the RentalItemEditScreen composable.
     */
     val done: Boolean = false
 )
 
+/* Data class used in RentalItemsScreen to specify the rental item to be
+edited.
+*/
 data class RentalItemCategoryState(
     val categoryId: Int = 0,
     val rentalItemId: Int = 0
@@ -54,6 +62,9 @@ data class UpdateRentalItemReq(
     val rentalItemName: String = ""
 )
 
+/* AddRentalItemReq data class represents the request body format for the
+addRentalItem API method.
+ */
 data class AddRentalItemReq(
     @SerializedName("rental_item_name")
     val rentalItemName: String = "",
@@ -80,4 +91,7 @@ the list of rental items.
  */
 data class RentalItemsRes(val items: List<RentalItem> = emptyList())
 
+/* Represents a response from the addRentalItem API method. Contains a
+RentalItem object retrieved from the API response.
+ */
 data class AddRentalItemRes(val rentalItem: RentalItem)

@@ -29,6 +29,10 @@ class RentalItemEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() 
     */
     private val rentalItemId = savedStateHandle.get<String>("rentalItemId")?.toIntOrNull() ?: 0
 
+    /* The value of the categoryId variable is set to the category id obtained
+    from savedStateHandle transmitted as a parameter. If there's no value or it
+    cannot be converted to integer, categoryId is set to 0.
+    */
     private val categoryId = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
 
     /* The method inside init lambda is called immediately when an instance
@@ -73,7 +77,7 @@ class RentalItemEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() 
 
 
     /* A public setter method for updating the done argument of the
-    _rentalItemState's CategoryState instance:
+    _rentalItemState's instance:
     */
     fun setDone(done: Boolean) {
         _rentalItemState.value = _rentalItemState.value.copy(done = done)

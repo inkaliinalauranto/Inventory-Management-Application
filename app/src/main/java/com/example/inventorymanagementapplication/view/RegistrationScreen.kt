@@ -32,16 +32,16 @@ import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.viewmodel.RegistrationViewModel
 
 
-/* Builds top bar with navigation icon. When clicked, the callback function
-provided as an argument (drawerState.open()) is called.
+/* Builds the top bar with a back arrow icon. When clicked, the callback
+function provided as an argument (navController.navigateUp()) is called.
 
-Builds the UI for the login screen using the LoginScreen composable
-function. Displays a CircularProgressIndicator if the loading argument of
-the loginState is true. Otherwise displays two text fields and a Login
-button. The text in the last text field is masked for security. The button
-can be pressed when there's text in both fields.
+Builds the UI for the registration screen using the RegistrationScreen
+composable. Displays a CircularProgressIndicator if the loading argument of
+the registrationState is true. Otherwise displays two text fields and a
+Registration button. The text in the last text field is masked for security.
+The button can be pressed when there's text in both fields.
 
-When the button is pressed, callback function are called.
+When the button is pressed, the callback function is called.
 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,19 +49,36 @@ fun RegistrationScreen(goBack: () -> Unit, onRegistrationClick: () -> Unit) {
     val registrationVM: RegistrationViewModel = viewModel()
     val context = LocalContext.current
 
+    /* If registration is not successful, the error of the registration
+    state won't be null and the error message is shown in a Toast.
+    */
     LaunchedEffect(key1 = registrationVM.registrationState.value.error) {
+        // if error != null:
         registrationVM.registrationState.value.error?.let {
-            Toast.makeText(context, registrationVM.registrationState.value.error, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context, registrationVM.registrationState.value.error, Toast.LENGTH_LONG
+            ).show()
+            registrationVM.clearRegistrationError()
         }
     }
 
+    /* If registration is successful, onRegistrationClick callback is called,
+    and the navigation to LoginScreen is implemented (which is defined in
+    MainActivity).
+    */
+    LaunchedEffect(key1 = registrationVM.registrationState.value.registrationOk) {
+        if (registrationVM.registrationState.value.registrationOk) {
+            registrationVM.setRegistration(ok = false)
+            onRegistrationClick()
+        }
+    }
 
     Scaffold(topBar = {
         TopAppBar(
             navigationIcon = {
                 IconButton(onClick = { goBack() }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack, 
+                        imageVector = Icons.Default.ArrowBack,
                         contentDescription = stringResource(id = R.string.registration)
                     )
                 }
@@ -108,10 +125,10 @@ fun RegistrationScreen(goBack: () -> Unit, onRegistrationClick: () -> Unit) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        enabled = registrationVM.registrationState.value.username != "" && registrationVM.registrationState.value.password != "",
+                        enabled = registrationVM.registrationState.value.username != "" &&
+                                registrationVM.registrationState.value.password != "",
                         onClick = {
                             registrationVM.register()
-                            onRegistrationClick()
                         }) {
                         Text(text = stringResource(id = R.string.register))
                     }

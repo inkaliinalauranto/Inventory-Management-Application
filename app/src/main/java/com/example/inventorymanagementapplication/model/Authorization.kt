@@ -3,10 +3,11 @@ package com.example.inventorymanagementapplication.model
 import com.google.gson.annotations.SerializedName
 
 data class RegistrationState(
+    val username: String = "",
+    val password: String = "",
     val loading: Boolean = false,
     val error: String? = null,
-    val username: String = "",
-    val password: String = ""
+    val registrationOk: Boolean = false
 )
 
 data class AuthReq(

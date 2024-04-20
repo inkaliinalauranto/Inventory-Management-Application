@@ -19,7 +19,7 @@ class CategoryEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     private val _categoryState = mutableStateOf(CategoryState())
 
     /* The public non-mutable variable representing the current category state
-    providing read-only access to the category state:
+    providing read-only access:
     */
     val categoryState: State<CategoryState> = _categoryState
 

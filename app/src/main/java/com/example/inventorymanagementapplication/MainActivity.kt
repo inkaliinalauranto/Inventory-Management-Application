@@ -63,8 +63,10 @@ class MainActivity : ComponentActivity() {
                     val context = LocalContext.current
 
                     LaunchedEffect(key1 = logoutViewModel.logoutState.value.error) {
-                        // let tekee oman scopin, joten errorin merkkijono on itissä
-                        // if error != null
+                        /* The let keyword creates an independent scope, which
+                        is why the error property is referenced as "it". The
+                        lambda is executed whenever the error is not null.
+                        */
                         logoutViewModel.logoutState.value.error?.let {
                             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
                         }
@@ -74,7 +76,10 @@ class MainActivity : ComponentActivity() {
                         if (logoutViewModel.logoutState.value.logoutOk) {
                             logoutViewModel.setLogout(ok = false)
                             navController.navigate(route = "loginScreen") {
-                                // Jätetään ainoastaan nykyinen sivu
+                                /* All other screens are popped out from
+                                backstack except login screen as a current
+                                screen.
+                                 */
                                 popUpTo(route = "loginScreen") {
                                     inclusive = true
                                 }
@@ -156,26 +161,13 @@ class MainActivity : ComponentActivity() {
                             defined using composables. Each screen is
                             associated with its specific composable method:
                             */
-                            composable(route = "categoriesScreen") {
-                                CategoriesScreen(
-                                    onMenuClicked = {
-                                        scope.launch {
-                                            drawerState.open()
-                                        }
+                            composable(route = "registrationScreen") {
+                                RegistrationScreen(
+                                    onRegistrationClick = {
+                                        navController.navigate(route = "loginScreen")
                                     },
-                                    /* Callback for navigating to the
-                                    CategoryEditScreen with the given
-                                    CategoryItem:
-                                    */
-                                    goToCategoryEdit = { categoryItem ->
-                                        navController.navigate(route = "categoryEditScreen/${categoryItem.categoryId}")
-                                    },
-                                    /* Callback for navigating to the
-                                    CategoryAddScreen:
-                                    */
-                                    goToCategoryAdd = { navController.navigate(route = "categoryAddScreen") },
-                                    goToRentalItemList = { categoryItem ->
-                                        navController.navigate(route = "rentalItemsScreen/${categoryItem.categoryId}")
+                                    goBack = {
+                                        navController.navigateUp()
                                     }
                                 )
                             }
@@ -192,14 +184,39 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            composable(route = "registrationScreen") {
-                                RegistrationScreen(
-                                    onRegistrationClick = {
-                                        navController.navigate(route = "loginScreen")
+                            composable(route = "categoriesScreen") {
+                                CategoriesScreen(
+                                    onMenuClicked = {
+                                        scope.launch {
+                                            drawerState.open()
+                                        }
                                     },
-                                    goBack = {
-                                        navController.navigateUp()
+                                    /* Callback for navigating to the
+                                    CategoryEditScreen with the given
+                                    CategoryItem:
+                                    */
+                                    goToCategoryEdit = { categoryItem ->
+                                        navController.navigate(
+                                            route = "categoryEditScreen/${categoryItem.categoryId}"
+                                        )
+                                    },
+                                    /* Callback for navigating to the
+                                    CategoryAddScreen:
+                                    */
+                                    goToCategoryAdd = { navController.navigate(route = "categoryAddScreen") },
+                                    goToRentalItemList = { categoryItem ->
+                                        navController.navigate(
+                                            route = "rentalItemsScreen/${categoryItem.categoryId}"
+                                        )
                                     }
+                                )
+                            }
+                            composable(route = "categoryAddScreen") {
+                                CategoryAddScreen(
+                                    goToCategories = {
+                                        navController.navigate(route = "categoriesScreen")
+                                    },
+                                    goBack = { navController.navigateUp() }
                                 )
                             }
                             composable(route = "categoryEditScreen/{categoryId}") {
@@ -210,12 +227,17 @@ class MainActivity : ComponentActivity() {
                                     goBack = { navController.navigateUp() }
                                 )
                             }
-                            composable(route = "categoryAddScreen") {
-                                CategoryAddScreen(
-                                    goToCategories = {
-                                        navController.navigate(route = "categoriesScreen")
+                            composable(route = "rentalItemsScreen/{categoryId}") {
+                                RentalItemsScreen(
+                                    goBack = { navController.navigateUp() },
+                                    goToRentalItemEdit = {
+                                        navController.navigate(
+                                            route = "rentalItemEditScreen/${it.rentalItemId}/${it.categoryId}"
+                                        )
                                     },
-                                    goBack = { navController.navigateUp() }
+                                    goToRentalItemAdd = {
+                                        navController.navigate(route = "rentalItemAddScreen/${it.categoryId}")
+                                    }
                                 )
                             }
                             composable(route = "rentalItemAddScreen/{categoryId}") {
@@ -235,7 +257,7 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(route = "rentalItemEditScreen/{rentalItemId}/{categoryId}") {
                                 RentalItemEditScreen(
-                                    goToItems = {
+                                    goToRentalItems = {
                                         navController.navigate(route = "rentalItemsScreen/${it.categoryId}") {
                                             popUpTo(
                                                 "rentalItemsScreen/${it.categoryId}"
@@ -246,17 +268,6 @@ class MainActivity : ComponentActivity() {
                                         }
                                     },
                                     goBack = { navController.navigateUp() })
-                            }
-                            composable(route = "rentalItemsScreen/{categoryId}") {
-                                RentalItemsScreen(
-                                    goBack = { navController.navigateUp() },
-                                    goToRentalItemEdit = {
-                                        navController.navigate(route = "rentalItemEditScreen/${it.rentalItemId}/${it.categoryId}")
-                                    },
-                                    goToRentalItemAdd = {
-                                        navController.navigate(route = "rentalItemAddScreen/${it.categoryId}")
-                                    }
-                                )
                             }
                         }
                     }

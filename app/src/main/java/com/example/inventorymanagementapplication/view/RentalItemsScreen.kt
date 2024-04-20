@@ -52,7 +52,7 @@ import com.example.inventorymanagementapplication.viewmodel.RentalItemsViewModel
   parameter changes from null to a string.
  */
 @Composable
-fun ConfirmItemDelete(
+fun ConfirmRentalItemDelete(
     loading: Boolean,
     error: String?,
     onDismiss: () -> Unit,
@@ -66,7 +66,7 @@ fun ConfirmItemDelete(
     whenever the value of nullable string shaped error variable is a string.
     In that case, the value of the error parameter is printed as a Toast
     message. clearError callback function entered as a parameter switches
-    the value of the categoryDeleteState object's attribute to null after
+    the value of the rentalItemDeleteState object's attribute to null after
     displaying the toast.
     */
     LaunchedEffect(key1 = error) {
@@ -77,8 +77,8 @@ fun ConfirmItemDelete(
         }
     }
 
-    /* When a trash can icon of a single category item is pressed in the
-    CategoriesScreen, this confirmation window view is displayed.
+    /* When a trash can icon of a single rental item is pressed in the
+    RentalItemsScreen, this confirmation window view is displayed.
     */
     AlertDialog(
         onDismissRequest = { /*TODO*/ },
@@ -120,11 +120,11 @@ fun ConfirmItemDelete(
 
 
 /* Parameters:
-- onMenuClicked: Callback function invoked when the menu icon is clicked.
-- goToCategoryEdit: Callback function invoked to navigate to the
-CategoryEditScreen with a CategoryItem parameter.
-- goToCategoryAdd: When the floating button is clicked, the navigation to
-the CategoryAddScreen is implemented through this callback.
+- goToRentalItemEdit: Callback function invoked to navigate to the
+RentalItemEditScreen with a RentalItemCategoryState parameter.
+- goToRentalItemAdd: When the floating button is clicked, the navigation to
+the RentalItemAddScreen is implemented through this callback.
+- goBack: Callback function invoked when the back arrow icon is clicked.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -165,9 +165,9 @@ fun RentalItemsScreen(
             )
         }) { it ->
         /* The actual content of the screen is created as an implementation
-        of the Box composable. When fetching categories, the circular progress
-        indicator is shown. Alternatively if any error occurs, an error
-        message is displayed on the screen. Otherwise, category items are
+        of the Box composable. When fetching rental items, the circular
+        progress indicator is shown. Alternatively if any error occurs, an
+        error message is displayed on the screen. Otherwise, rental items are
         displayed on the screen.
         */
         Box(
@@ -184,13 +184,13 @@ fun RentalItemsScreen(
                     text = stringResource(id = R.string.error_with_colon) + " ${rentalItemsVM.rentalItemsState.value.error}"
                 )
 
-                /* When the trash can icon of a category is clicked, the
-                id argument of the CategoryDeleteState is set to the id of
-                the clicked category item. In this case, the id is always
-                greater than 0, and the ConfirmCategoryDelete confirmation
+                /* When the trash can icon of a rental item is clicked, the
+                id argument of the RentalItemDeleteState is set to the id of
+                the clicked rental item. In this case, the id is always
+                greater than 0, and the ConfirmRentalItemDelete confirmation
                 window is displayed.
                 */
-                rentalItemsVM.rentalItemDeleteState.value.id > 0 -> ConfirmItemDelete(
+                rentalItemsVM.rentalItemDeleteState.value.id > 0 -> ConfirmRentalItemDelete(
                     loading = rentalItemsVM.rentalItemDeleteState.value.loading,
                     error = rentalItemsVM.rentalItemDeleteState.value.error,
                     onDismiss = { rentalItemsVM.setDeletableRentalItemId(id = 0) },

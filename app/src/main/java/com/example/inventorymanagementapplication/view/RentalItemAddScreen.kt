@@ -31,6 +31,15 @@ import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.model.RentalItemState
 import com.example.inventorymanagementapplication.viewmodel.RentalItemAddViewModel
 
+/* Builds the top bar and the UI for adding a rental item using the
+RentalItemAddScreen composable function. Displays a CircularProgressIndicator
+if the loading argument of the rentalItemState is true. Alternatively if an
+error occurs, an error message is displayed on the screen.
+
+Otherwise, displays a text field and two adjacent buttons below the field.
+When the Add button is pressed, the addRentalItem method of the vm instance
+is called. When the Back button is pressed, the goBack callback is called.
+*/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RentalItemAddScreen(goToRentalItems: (RentalItemState) -> Unit, goBack: () -> Unit) {
@@ -47,10 +56,8 @@ fun RentalItemAddScreen(goToRentalItems: (RentalItemState) -> Unit, goBack: () -
         topBar = {
             TopAppBar(title = { Text(text = stringResource(id = R.string.add_rental_item)) },
                       navigationIcon = {
-                          // Menu icon button:
-                          IconButton(onClick = {
-                              goBack()
-                          }) {
+                          // Arrow icon button:
+                          IconButton(onClick = { goBack() }) {
                               Icon(
                                   imageVector = Icons.Default.ArrowBack,
                                   contentDescription = stringResource(id = R.string.back)

@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inventorymanagementapplication.api.categoriesService
 import com.example.inventorymanagementapplication.api.rentalItemsService
 import com.example.inventorymanagementapplication.model.RentalItemCategoryState
 import com.example.inventorymanagementapplication.model.RentalItemDeleteState
@@ -13,27 +12,36 @@ import com.example.inventorymanagementapplication.model.RentalItemsState
 import kotlinx.coroutines.launch
 
 class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
-
-    private val id = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
-
-    private val _rentalItemCategoryState = mutableStateOf(RentalItemCategoryState())
-
-    val rentalItemCategoryState: State<RentalItemCategoryState> = _rentalItemCategoryState
-
     /* The private attribute of the class representing the current rental
     items state:
     */
     private val _rentalItemsState = mutableStateOf(RentalItemsState())
-
 
     /* The public non-mutable variable representing the current rental
     items state providing read-only access:
     */
     val rentalItemsState: State<RentalItemsState> = _rentalItemsState
 
+    /* The value of the categoryId variable is set to the category id obtained
+    from savedStateHandle transmitted as a parameter. If there's no value or it
+    cannot be converted to integer, categoryId is set to 0.
+    */
+    private val categoryId = savedStateHandle.get<String>("categoryId")?.toIntOrNull() ?: 0
+
+    /* The private attribute of the class representing the current rental
+    item and its category. The RentalItemCategoryState data class includes
+    categoryId and rentalItemId attributes:
+    */
+    private val _rentalItemCategoryState = mutableStateOf(RentalItemCategoryState())
+
+    /* The public non-mutable variable representing the current rental
+    item and category state providing read-only access. It is needed in
+    RentalItemsScreen/MainActivity when navigating to RentalItemEditScreen.
+    */
+    val rentalItemCategoryState: State<RentalItemCategoryState> = _rentalItemCategoryState
+
     /* The private attribute of the class representing the current state of
-    an instance created from RentalItemDeleteState data class, which is defined
-    in Categories file:
+    an instance created from RentalItemDeleteState data class.
     */
     private val _rentalItemDeleteState = mutableStateOf(RentalItemDeleteState())
 
@@ -64,10 +72,10 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             try {
                 _rentalItemsState.value = _rentalItemsState.value.copy(loading = true)
-                val rentalItemsRes = rentalItemsService.getRentalItemsByCategoryId(id)
+                val rentalItemsRes = rentalItemsService.getRentalItemsByCategoryId(categoryId)
                 _rentalItemsState.value =
                     _rentalItemsState.value.copy(list = rentalItemsRes.items)
-                _rentalItemsState.value = _rentalItemsState.value.copy(categoryId = id)
+                _rentalItemsState.value = _rentalItemsState.value.copy(categoryId = categoryId)
             } catch (e: Exception) {
                 _rentalItemsState.value = _rentalItemsState.value.copy(error = e.toString())
             } finally {
@@ -77,21 +85,21 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     }
 
 
-    /* When deleting a category, the value of the loading
-    attribute of the CategoryDeleteState instance is changed to
-    true. In that case, in the ConfirmCategoryDelete composable's
-    AlertDialog confirmation window, the Delete text button is
-    disabled and the CircularProgressIndicator is displayed.
+    /* When deleting a rental item, the value of the loading attribute
+    of RentalItemDeleteState instance is changed to true. In that case,
+    in the ConfirmRentalItemDelete composable's AlertDialog confirmation
+    window, the Delete text button is disabled and the
+    CircularProgressIndicator is displayed.
 
-    The category is then removed from the backend based on the id in
-    _categoryDeleteState. The removing is implemented using the removeCategory
-    (API) interface method. With filter lambda, the value of
-    _categoriesState's list argument is filtered by omitting an item that has
-    the same categoryId than the categoryDeleteState's id. Then this new
+    The rental item is then removed from the backend based on the id in
+    _rentalItemDeleteState. The removing is implemented using the
+    removeRentalItem (API) interface method. With filter lambda, the value of
+    _rentalItemsState's list argument is filtered by omitting an item that has
+    the same rentalItemId than the rentalItemDeleteState's id. Then this new
     filtered list is set as the list state.
 
-    The id argument of the _categoryDeleteState is then set to 0, which closes
-    the confirmation window in CategoriesScreen composable. Whether any error
+    The id argument of the _rentalItemDeleteState is then set to 0, which closes
+    the confirmation window in RentalItemsScreen composable. Whether any error
     occurs or not, the loading state is reset to false indicating the end
     of the removal operation.
     */
@@ -114,14 +122,20 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     }
 
 
+    /* Public setter method for updating the properties of the rental item
+    category state. category id is obtained from savedStateHandle.
+    */
     fun setRentalItemAndCategory(rentalItemId: Int) {
-        _rentalItemCategoryState.value = _rentalItemCategoryState.value.copy(categoryId = id, rentalItemId = rentalItemId)
+        _rentalItemCategoryState.value = _rentalItemCategoryState.value.copy(
+            categoryId = categoryId,
+            rentalItemId = rentalItemId
+        )
     }
 
 
-    /* Sets the id of the category to be deleted in the _categoryDeleteState
-    instance. This method is used in CategoriesScreen when the trash can icon
-    is clicked.
+    /* Sets the id of the rental item to be deleted in the
+    _rentalItemDeleteState instance. This method is used in RentalItemsScreen
+    when the trash can icon is clicked.
     */
     fun setDeletableRentalItemId(id: Int) {
         _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(id = id)

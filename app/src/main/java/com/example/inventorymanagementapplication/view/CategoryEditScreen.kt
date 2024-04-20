@@ -36,7 +36,7 @@ CategoryEditScreen composable function. Displays a CircularProgressIndicator
 if the loading argument of the categoryState is true. Alternatively if an
 error occurs, an error message is displayed on the screen.
 
-Otherwise, it displays a text field and two adjacent buttons below the field.
+Otherwise, displays a text field and two adjacent buttons below the field.
 When the Edit button is pressed, the editCategories method of the vm instance
 is called. When the Back button is pressed, the goBack callback is called.
 */
@@ -70,7 +70,7 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
                         goBack()
                     }) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack, 
+                            imageVector = Icons.Default.ArrowBack,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -87,7 +87,12 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
                 vm.categoryState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
-                vm.categoryState.value.error != null -> Text(text = stringResource(id = R.string.error_with_colon) + " ${vm.categoryState.value.error.toString()}")
+
+                vm.categoryState.value.error != null -> Text(
+                    text = stringResource(id = R.string.error_with_colon) +
+                            " ${vm.categoryState.value.error.toString()}"
+                )
+
                 else -> Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,

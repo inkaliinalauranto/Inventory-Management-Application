@@ -32,6 +32,11 @@ interface RentalItemsApi {
     @GET("rentalitem/{rentalItemId}/")
     suspend fun getRentalItemById(@Path("rentalItemId") rentalItemId: Int): RentalItemRes
 
+    /* An API-method that adds a new rental item which is based on the data
+    transmitted in the AddRentalItemReq-shaped data class. The rental item is
+    added to the category specified as a path parameter. This method returns
+    data in the format of the AddRentalItemRes data class.
+    */
     @POST("category/{categoryId}/items/")
     suspend fun addRentalItem(
         @Path("categoryId") categoryId: Int,
@@ -50,6 +55,10 @@ interface RentalItemsApi {
         @Body reqBody: UpdateRentalItemReq
     ): RentalItemRes
 
+    /* An API-method that removes a rental item according to the rental item
+    id. The rental item resource is retrieved from
+    http://10.0.2.2:8000/api/v1/rentalitem/{rentalItemId}.
+    */
     @DELETE("rentalitem/{rentalItemId}/")
     suspend fun removeRentalItem(
         @Path("rentalItemId") rentalItemId: Int
