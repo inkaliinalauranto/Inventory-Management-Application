@@ -24,8 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.model.RentalItemState
 import com.example.inventorymanagementapplication.viewmodel.RentalItemAddViewModel
 
@@ -43,7 +45,7 @@ fun RentalItemAddScreen(goToRentalItems: (RentalItemState) -> Unit, goBack: () -
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "Add rental item") },
+            TopAppBar(title = { Text(text = stringResource(id = R.string.add_rental_item)) },
                       navigationIcon = {
                           // Menu icon button:
                           IconButton(onClick = {
@@ -51,7 +53,7 @@ fun RentalItemAddScreen(goToRentalItems: (RentalItemState) -> Unit, goBack: () -
                           }) {
                               Icon(
                                   imageVector = Icons.Default.ArrowBack,
-                                  contentDescription = "Takaisin"
+                                  contentDescription = stringResource(id = R.string.back)
                               )
                           }
                       })
@@ -68,7 +70,10 @@ fun RentalItemAddScreen(goToRentalItems: (RentalItemState) -> Unit, goBack: () -
                 )
 
                 vm.rentalItemState.value.error != null ->
-                    Text(text = "Virhe: ${vm.rentalItemState.value.error.toString()}")
+                    Text(
+                        text = stringResource(id = R.string.error_with_colon) +
+                                " ${vm.rentalItemState.value.error.toString()}"
+                    )
 
                 else -> Column(
                     modifier = Modifier.fillMaxSize(),
@@ -81,12 +86,12 @@ fun RentalItemAddScreen(goToRentalItems: (RentalItemState) -> Unit, goBack: () -
                     )
                     Spacer(modifier = Modifier.height(height = 16.dp))
                     Row {
-                        Button(onClick = { vm.addRentalItem() }) {
-                            Text(text = "Add")
+                        Button(onClick = { goBack() }) {
+                            Text(text = stringResource(id = R.string.cancel))
                         }
                         Spacer(modifier = Modifier.width(width = 8.dp))
-                        Button(onClick = { goBack() }) {
-                            Text(text = "Cancel")
+                        Button(onClick = { vm.addRentalItem() }) {
+                            Text(text = stringResource(id = R.string.add))
                         }
                     }
                 }

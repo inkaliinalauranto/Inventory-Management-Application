@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -51,7 +52,9 @@ class MainActivity : ComponentActivity() {
             InventoryManagementApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize().padding(NavigationDrawerItemDefaults.ItemPadding),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(NavigationDrawerItemDefaults.ItemPadding),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val logoutViewModel: LogoutViewModel = viewModel()
@@ -102,7 +105,7 @@ class MainActivity : ComponentActivity() {
                                 in the navigation drawer menu:
                                 */
                                 NavigationDrawerItem(
-                                    label = { Text(text = "Categories") },
+                                    label = { Text(text = stringResource(id = R.string.categories)) },
                                     /* If the current route of navigation
                                     destination is "categoriesScreen",
                                     "selected" is true. Otherwise, it is false.
@@ -122,12 +125,12 @@ class MainActivity : ComponentActivity() {
                                     icon = {
                                         Icon(
                                             imageVector = Icons.Filled.Home,
-                                            contentDescription = "Home"
+                                            contentDescription = stringResource(id = R.string.home)
                                         )
                                     }
                                 )
                                 NavigationDrawerItem(
-                                    label = { Text(text = "Logout") },
+                                    label = { Text(text = stringResource(id = R.string.logout)) },
                                     selected = route == "loginScreen",
                                     onClick = {
                                         scope.launch {
@@ -138,7 +141,7 @@ class MainActivity : ComponentActivity() {
                                     icon = {
                                         Icon(
                                             imageVector = Icons.Filled.Lock,
-                                            contentDescription = "Login"
+                                            contentDescription = stringResource(id = R.string.logout_icon)
                                         )
                                     }
                                 )

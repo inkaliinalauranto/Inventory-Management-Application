@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inventorymanagementapplication.api.categoriesService
 import com.example.inventorymanagementapplication.api.rentalItemsService
 import com.example.inventorymanagementapplication.model.RentalItemState
 import com.example.inventorymanagementapplication.model.UpdateRentalItemReq
@@ -95,7 +94,6 @@ class RentalItemEditViewModel(savedStateHandle: SavedStateHandle) : ViewModel() 
             try {
                 _rentalItemState.value = _rentalItemState.value.copy(loading = true)
                 _rentalItemState.value = _rentalItemState.value.copy(categoryId = categoryId)
-                println("KATEGORIA EDIT! $categoryId")
                 rentalItemsService.editRentalItem(
                     rentalItemId,
                     UpdateRentalItemReq(rentalItemName = _rentalItemState.value.rentalItemName)

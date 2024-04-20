@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Varastonhallintajärjestelmä</string>
+    <string name="categories">Kategoriat</string>
+    <string name="home">Koti</string>
+    <string name="logout">Uloskirjautuminen</string>
+    <string name="logout_icon">Uloskirjautumiskuvake</string>
+    <string name="delete">Poista</string>
+    <string name="delete_category">Poista kategoria</string>
+    <string name="delete_category_confirmation_text">Haluatko varmasti poistaa tämän kategorian?</string>
+    <string name="cancel">Peruuta</string>
+    <string name="add_category">Lisää kategoria</string>
+    <string name="menu">Valikko</string>
+    <string name="error_with_colon">Virhe:</string>
+    <string name="show_rental_items">Näytä tavarat</string>
+    <string name="edit">Muokkaa</string>
+    <string name="back">Takaisin</string>
+    <string name="add">Lisää</string>
+    <string name="edit_category_name">Muokkaa kategorian nimeä</string>
+    <string name="login">Kirjautuminen</string>
+    <string name="username">Käyttäjänimi</string>
+    <string name="password">Salasana</string>
+    <string name="no_account_text">Ei tiliä?</string>
+    <string name="register_here">Rekisteröidy</string>
+    <string name="registration">Rekisteröityminen</string>
+    <string name="register">Rekisteröidy</string>
+    <string name="add_rental_item">Lisää tavara</string>
+    <string name="edit_rental_item_name">Muokkaa tavaran nimeä</string>
+    <string name="delete_rental_item">Poista tavara</string>
+    <string name="delete_rental_item_confirmation_text">Haluatko varmasti poistaa tämän tavaran?</string>
+    <string name="rental_items">Tavarat</string>
+</resources>

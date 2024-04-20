@@ -24,9 +24,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.viewmodel.RegistrationViewModel
 
 
@@ -58,10 +60,13 @@ fun RegistrationScreen(goBack: () -> Unit, onRegistrationClick: () -> Unit) {
         TopAppBar(
             navigationIcon = {
                 IconButton(onClick = { goBack() }) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Registration")
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack, 
+                        contentDescription = stringResource(id = R.string.registration)
+                    )
                 }
             },
-            title = { Text("Register") }
+            title = { Text(text = stringResource(id = R.string.register)) }
         )
     }) {
         Box(
@@ -87,7 +92,7 @@ fun RegistrationScreen(goBack: () -> Unit, onRegistrationClick: () -> Unit) {
                             registrationVM.setUsername(it)
                         },
                         placeholder = {
-                            Text(text = "Username")
+                            Text(text = stringResource(id = R.string.username))
                         }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -98,7 +103,7 @@ fun RegistrationScreen(goBack: () -> Unit, onRegistrationClick: () -> Unit) {
                             registrationVM.setPassword(it)
                         },
                         placeholder = {
-                            Text(text = "Password")
+                            Text(text = stringResource(id = R.string.password))
                         }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -108,7 +113,7 @@ fun RegistrationScreen(goBack: () -> Unit, onRegistrationClick: () -> Unit) {
                             registrationVM.register()
                             onRegistrationClick()
                         }) {
-                        Text(text = "Register")
+                        Text(text = stringResource(id = R.string.register))
                     }
                 }
             }

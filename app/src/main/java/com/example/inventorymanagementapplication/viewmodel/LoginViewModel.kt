@@ -1,6 +1,5 @@
 package com.example.inventorymanagementapplication.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -28,13 +27,12 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMode
         viewModelScope.launch {
             try {
                 val accessToken = db.accountDao().getToken()
-                Log.d("Juhani", "LoginViewModel -> accessToken: $accessToken ja authUserId: ${_loginState.value.accountId}")
                 accessToken?.let {
                     val res = authorizationService.getAccount(bearerToken = "Bearer $it")
                     _loginState.value = _loginState.value.copy(accountId = res.authUserId)
                 }
             } catch (e: Exception) {
-                Log.d("Juhani", "Virhe: $e")
+                _loginState.value = _loginState.value.copy(error = e.toString())
             }
         }
     }

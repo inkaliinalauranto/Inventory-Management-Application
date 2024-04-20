@@ -1,6 +1,5 @@
 package com.example.inventorymanagementapplication.view
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,8 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.viewmodel.CategoryAddViewModel
 
 /* Builds the top bar and the UI for adding a category using the
@@ -62,25 +63,30 @@ fun CategoryAddScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Lisää kategoria")
+                    Text(text = stringResource(id = R.string.add_category))
                 },
                 navigationIcon = {
                     IconButton(onClick = {
                         goBack()
                     }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Takaisin")
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = stringResource(id = R.string.back)
+                        )
                     }
                 }
             )
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(it)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(it)) {
             when {
                 vm.categoryState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
 
-                vm.categoryState.value.error != null -> Text(text = "Virhe: ${vm.categoryState.value.error}")
+                vm.categoryState.value.error != null -> Text(text = stringResource(id = R.string.error_with_colon) + " ${vm.categoryState.value.error}")
 
                 else -> Column(
                     modifier = Modifier.fillMaxSize(),
@@ -93,12 +99,12 @@ fun CategoryAddScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
                     )
                     Spacer(modifier = Modifier.height(height = 16.dp))
                     Row {
-                        Button(onClick = { vm.addCategory() }) {
-                            Text(text = "Lisää")
+                        Button(onClick = { goBack() }) {
+                            Text(text = stringResource(id = R.string.cancel))
                         }
                         Spacer(modifier = Modifier.width(width = 8.dp))
-                        Button(onClick = { goBack() }) {
-                            Text(text = "Takaisin")
+                        Button(onClick = { vm.addCategory() }) {
+                            Text(text = stringResource(id = R.string.add))
                         }
                     }
                 }

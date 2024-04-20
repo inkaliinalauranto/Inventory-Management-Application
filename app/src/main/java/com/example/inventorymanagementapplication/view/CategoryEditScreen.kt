@@ -24,8 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.viewmodel.CategoryEditViewModel
 
 
@@ -61,13 +63,16 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Muokkaa kategorian nimeä")
+                    Text(text = stringResource(id = R.string.edit_category_name))
                 },
                 navigationIcon = {
                     IconButton(onClick = {
                         goBack()
                     }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Takaisin")
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack, 
+                            contentDescription = stringResource(id = R.string.back)
+                        )
                     }
                 }
             )
@@ -82,7 +87,7 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
                 vm.categoryState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
-                vm.categoryState.value.error != null -> Text(text = "Virhe: ${vm.categoryState.value.error.toString()}")
+                vm.categoryState.value.error != null -> Text(text = stringResource(id = R.string.error_with_colon) + " ${vm.categoryState.value.error.toString()}")
                 else -> Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -94,12 +99,12 @@ fun CategoryEditScreen(goToCategories: () -> Unit, goBack: () -> Unit) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Row {
-                        Button(onClick = { vm.editCategory() }) {
-                            Text(text = "Muokkaa")
+                        Button(onClick = { goBack() }) {
+                            Text(text = stringResource(id = R.string.cancel))
                         }
                         Spacer(modifier = Modifier.width(8.dp))
-                        Button(onClick = { goBack() }) {
-                            Text(text = "Takaisin")
+                        Button(onClick = { vm.editCategory() }) {
+                            Text(text = stringResource(id = R.string.edit))
                         }
                     }
                 }

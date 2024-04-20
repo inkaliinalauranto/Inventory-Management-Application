@@ -32,8 +32,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.model.RentalItemCategoryState
 import com.example.inventorymanagementapplication.model.RentalItemsState
 import com.example.inventorymanagementapplication.viewmodel.RentalItemsViewModel
@@ -85,13 +87,13 @@ fun ConfirmItemDelete(
                 onClick = { onConfirm() },
                 enabled = !loading
             ) {
-                Text(text = "Delete")
+                Text(text = stringResource(id = R.string.delete))
             }
         },
         icon = {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = "Delete rental item"
+                contentDescription = stringResource(id = R.string.delete_rental_item)
             )
         },
         text = {
@@ -101,14 +103,16 @@ fun ConfirmItemDelete(
                         modifier = Modifier.align(Alignment.Center)
                     )
 
-                    else -> Text(text = "Are you sure you want to delete this rental item")
+                    else -> Text(
+                        text = stringResource(id = R.string.delete_rental_item_confirmation_text)
+                    )
                 }
             }
         },
-        title = { Text(text = "Delete rental item") },
+        title = { Text(text = stringResource(id = R.string.delete_rental_item)) },
         dismissButton = {
             TextButton(onClick = { onDismiss() }) {
-                Text(text = "Cancel")
+                Text(text = stringResource(id = R.string.cancel))
             }
         }
     )
@@ -136,18 +140,26 @@ fun RentalItemsScreen(
     // Top bar is created insides Scaffold:
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { goToRentalItemAdd(rentalItemsVM.rentalItemsState.value) }) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add rental item")
+            FloatingActionButton(
+                onClick = { goToRentalItemAdd(rentalItemsVM.rentalItemsState.value) }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Add, 
+                    contentDescription = stringResource(id = R.string.add_rental_item)
+                )
             }
         },
         topBar = {
             TopAppBar(
-                title = { Text("Tavarat") },
+                title = { Text(text = stringResource(id = R.string.rental_items)) },
                 navigationIcon = {
                     IconButton(onClick = {
                         goBack()
                     }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Takaisin")
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack, 
+                            contentDescription = stringResource(id = R.string.back)
+                        )
                     }
                 }
             )
@@ -169,7 +181,7 @@ fun RentalItemsScreen(
                 )
 
                 rentalItemsVM.rentalItemsState.value.error != null -> Text(
-                    text = "Error: ${rentalItemsVM.rentalItemsState.value.error}"
+                    text = stringResource(id = R.string.error_with_colon) + " ${rentalItemsVM.rentalItemsState.value.error}"
                 )
 
                 /* When the trash can icon of a category is clicked, the
@@ -213,6 +225,15 @@ fun RentalItemsScreen(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.End
                                     ) {
+                                        IconButton(onClick = {
+                                            rentalItemsVM.setRentalItemAndCategory(rentalItemId = it.rentalItemId)
+                                            goToRentalItemEdit(rentalItemsVM.rentalItemCategoryState.value)
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Edit,
+                                                contentDescription = stringResource(id = R.string.edit)
+                                            )
+                                        }
                                         /* When a rental item's Delete icon
                                         button is clicked, the id of the
                                         clicked rental item is set into
@@ -220,21 +241,11 @@ fun RentalItemsScreen(
                                         the rentalItemsVM instance.
                                          */
                                         IconButton(onClick = {
-                                            println("Asetetaan _rentalItemDeleteStatelle id: ${it.rentalItemId}")
                                             rentalItemsVM.setDeletableRentalItemId(it.rentalItemId)
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Default.Delete,
-                                                contentDescription = "Delete"
-                                            )
-                                        }
-                                        IconButton(onClick = {
-                                            rentalItemsVM.setRentalItemAndCategory(rentalItemId = it.rentalItemId)
-                                            goToRentalItemEdit(rentalItemsVM.rentalItemCategoryState.value)
-                                        }) {
-                                            Icon(
-                                                imageVector = Icons.Default.Edit,
-                                                contentDescription = "Edit"
+                                                contentDescription = stringResource(id = R.string.delete)
                                             )
                                         }
                                     }

@@ -1,6 +1,5 @@
 package com.example.inventorymanagementapplication.view
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,9 +24,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.viewmodel.LoginViewModel
 
 
@@ -62,7 +63,6 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
     }
 
     LaunchedEffect(key1 = loginVM.loginState.value.accountId) {
-        Log.d("Juhani", "LoginScreen -> Tili-ID: ${loginVM.loginState.value.accountId }")
         if (loginVM.loginState.value.accountId > 0) {
             loginVM.setAccountId(id = 0)
             goToCategories()
@@ -72,9 +72,9 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
     Scaffold(topBar = {
         TopAppBar(
             navigationIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "Login")
+                Icon(imageVector = Icons.Default.Lock, contentDescription = stringResource(id = R.string.login))
             },
-            title = { Text("Login") }
+            title = { Text(text = stringResource(id = R.string.login)) }
         )
     }) {
         Box(
@@ -100,7 +100,7 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
                             loginVM.setUsername(it)
                         },
                         placeholder = {
-                            Text(text = "Username")
+                            Text(text = stringResource(id = R.string.username))
                         }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -111,7 +111,7 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
                             loginVM.setPassword(it)
                         },
                         placeholder = {
-                            Text(text = "Password")
+                            Text(text = stringResource(id = R.string.password))
                         }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -120,12 +120,12 @@ fun LoginScreen(goToCategories: () -> Unit, onLoginClick: () -> Unit, goToRegist
                         onClick = {
                             loginVM.login()
                         }) {
-                        Text(text = "Login")
+                        Text(text = stringResource(id = R.string.login))
                     }
                     Spacer(modifier = Modifier.height(24.dp))
-                    Text(text = "Don't have an account?")
+                    Text(text = stringResource(id = R.string.no_account_text))
                     TextButton(onClick = { goToRegistrationScreen() }) {
-                        Text(text = "Register here")
+                        Text(text = stringResource(id = R.string.register_here))
                     }
                 }
             }

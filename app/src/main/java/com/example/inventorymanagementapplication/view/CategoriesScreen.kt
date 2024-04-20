@@ -32,9 +32,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.inventorymanagementapplication.R
 import com.example.inventorymanagementapplication.model.CategoryItem
 import com.example.inventorymanagementapplication.viewmodel.CategoriesViewModel
 import java.time.LocalDateTime
@@ -50,7 +52,6 @@ fun ItemImage() {
         contentDescription = null
     )
 }
-
 
 /* Parameters:
 - loading: a boolean of which value defines if the confirm button is enabled.
@@ -97,13 +98,13 @@ fun ConfirmCategoryDelete(
                 onClick = { onConfirm() },
                 enabled = !loading
             ) {
-                Text(text = "Delete")
+                Text(text = stringResource(id = R.string.delete))
             }
         },
         icon = {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = "Delete category"
+                contentDescription = stringResource(id = R.string.delete_category)
             )
         },
         text = {
@@ -113,19 +114,18 @@ fun ConfirmCategoryDelete(
                         modifier = Modifier.align(Alignment.Center)
                     )
 
-                    else -> Text(text = "Are you sure you want to delete this category?")
+                    else -> Text(text = stringResource(id = R.string.delete_category_confirmation_text))
                 }
             }
         },
-        title = { Text(text = "Delete category") },
+        title = { Text(text = stringResource(id = R.string.delete_category)) },
         dismissButton = {
             TextButton(onClick = { onDismiss() }) {
-                Text(text = "Cancel")
+                Text(text = stringResource(id = R.string.cancel))
             }
         }
     )
 }
-
 
 /* Parameters:
 - onMenuClicked: Callback function invoked when the menu icon is clicked.
@@ -148,18 +148,24 @@ fun CategoriesScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { goToCategoryAdd() }) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Lisää kategoria")
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = stringResource(id = R.string.add_category)
+                )
             }
         },
         topBar = {
             TopAppBar(
-                title = { Text(text = "Kategoriat") },
+                title = { Text(text = stringResource(id = R.string.categories)) },
                 navigationIcon = {
                     // Menu icon button:
                     IconButton(onClick = {
                         onMenuClicked()
                     }) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = stringResource(id = R.string.menu)
+                        )
                     }
                 }
             )
@@ -181,7 +187,7 @@ fun CategoriesScreen(
                 )
 
                 categoriesVM.categoriesState.value.error != null -> Text(
-                    text = "Error: ${categoriesVM.categoriesState.value.error}"
+                    text = stringResource(id = R.string.error_with_colon) + " ${categoriesVM.categoriesState.value.error}"
                 )
 
                 /* When the trash can icon of a category is clicked, the
@@ -203,7 +209,9 @@ fun CategoriesScreen(
                     items(categoriesVM.categoriesState.value.list) {
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Row(
-                                modifier = Modifier.fillMaxWidth().padding(bottom = 25.dp, top = 25.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 25.dp, top = 25.dp)
                             ) {
                                 Column(
                                     modifier = Modifier.align(Alignment.CenterVertically)
@@ -228,7 +236,15 @@ fun CategoriesScreen(
                                         horizontalArrangement = Arrangement.End
                                     ) {
                                         TextButton(onClick = { goToRentalItemList(it) }) {
-                                            Text(text = "Näytä tavarat")
+                                            Text(text = stringResource(id = R.string.show_rental_items))
+                                        }
+                                        IconButton(onClick = {
+                                            goToCategoryEdit(it)
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Edit,
+                                                contentDescription = stringResource(id = R.string.edit)
+                                            )
                                         }
                                         /* When a category's Delete icon button is
                                         clicked, the category id of the clicked
@@ -240,15 +256,7 @@ fun CategoriesScreen(
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Default.Delete,
-                                                contentDescription = "Delete"
-                                            )
-                                        }
-                                        IconButton(onClick = {
-                                            goToCategoryEdit(it)
-                                        }) {
-                                            Icon(
-                                                imageVector = Icons.Default.Edit,
-                                                contentDescription = "Edit"
+                                                contentDescription = stringResource(id = R.string.delete)
                                             )
                                         }
                                     }
