@@ -4,16 +4,16 @@ import com.google.gson.annotations.SerializedName
 
 // RentalItemState and its properties with default values:
 data class RentalItemState(
-    /* categoryId is needed, when navigation back from RentalItemAddScreen
-    to RentalItemsScreen. categoryId property defines the parent category
-    of RentalItemsScreen.
+    /* categoryId is needed, when navigating back from RentalItemAddScreen
+    or RentalItemEditScreen to RentalItemsScreen. categoryId property defines
+    the parent category of RentalItemsScreen.
      */
     val categoryId: Int = 0,
     val rentalItemName: String = "",
     val loading: Boolean = false,
     val error: String? = null,
     /* The transform of this property's value is used in LaunchedEffect in
-    the RentalItemEditScreen composable.
+    RentalItemEditScreen and RentalItemAddScreen composables.
     */
     val done: Boolean = false
 )
@@ -72,10 +72,9 @@ data class AddRentalItemReq(
     val createdByUserId: Int = 0
 )
 
-/* RentalItemRes and its property with a default value. The API method
+/* RentalItemRes and its properties with default values. The API method
 getRentalItemById returns a response that is in the format of this data
-class. The rentalItem property of this structure is in the form of the
-RentalItem data class object.
+class.
  */
 data class RentalItemRes(
     @SerializedName("rental_item_id")

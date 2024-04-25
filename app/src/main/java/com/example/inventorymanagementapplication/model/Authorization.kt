@@ -15,7 +15,7 @@ data class AuthReq(
     val password: String = ""
 )
 
-// The data i.e. the model part of MVVM:
+
 data class LoginState(
     val username: String = "",
     val password: String = "",

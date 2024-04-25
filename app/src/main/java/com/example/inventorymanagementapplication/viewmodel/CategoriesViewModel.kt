@@ -65,6 +65,21 @@ class CategoriesViewModel() : ViewModel() {
     }
 
 
+    /* Sets the id of the category to be deleted in the _categoryDeleteState
+    instance. This method is used in CategoriesScreen when the trash can icon
+    is clicked.
+    */
+    fun setDeletableCategoryId(id: Int) {
+        _categoryDeleteState.value = _categoryDeleteState.value.copy(id = id)
+    }
+
+
+    // Resets the error state:
+    fun clearDeleteError() {
+        _categoryDeleteState.value = _categoryDeleteState.value.copy(error = null)
+    }
+
+
     /* When deleting a category, the value of the loading
     attribute of the CategoryDeleteState instance is changed to
     true. In that case, in the ConfirmCategoryDelete composable's
@@ -100,20 +115,4 @@ class CategoriesViewModel() : ViewModel() {
             }
         }
     }
-
-
-    /* Sets the id of the category to be deleted in the _categoryDeleteState
-    instance. This method is used in CategoriesScreen when the trash can icon
-    is clicked.
-    */
-    fun setDeletableCategoryId(id: Int) {
-        _categoryDeleteState.value = _categoryDeleteState.value.copy(id = id)
-    }
-
-
-    // Resets the error state:
-    fun clearDeleteError() {
-        _categoryDeleteState.value = _categoryDeleteState.value.copy(error = null)
-    }
-
 }

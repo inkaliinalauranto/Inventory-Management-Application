@@ -86,6 +86,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
+
                     /* A variable that defines the status (open/closed) of the
                     drawer:
                      */
@@ -99,7 +100,7 @@ class MainActivity : ComponentActivity() {
                     screen view:
                     */
                     ModalNavigationDrawer(
-                        // Deactivate side swipe:
+                        // Deactivate side swipe in login and registration screens:
                         gesturesEnabled = (route != "loginScreen" && route != "registrationScreen"),
                         drawerState = drawerState,
 //                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),

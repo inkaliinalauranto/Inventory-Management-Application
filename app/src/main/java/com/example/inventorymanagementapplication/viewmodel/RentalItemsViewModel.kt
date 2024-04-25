@@ -36,7 +36,7 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     /* The public non-mutable variable representing the current rental
     item and category state providing read-only access. It is needed in
-    RentalItemsScreen/MainActivity when navigating to RentalItemEditScreen.
+    RentalItemsScreen and MainActivity when navigating to RentalItemEditScreen.
     */
     val rentalItemCategoryState: State<RentalItemCategoryState> = _rentalItemCategoryState
 
@@ -85,6 +85,32 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     }
 
 
+    /* Public setter method for updating the properties of the rental item
+    category state. category id is obtained from savedStateHandle.
+    */
+    fun setRentalItemAndCategory(rentalItemId: Int) {
+        _rentalItemCategoryState.value = _rentalItemCategoryState.value.copy(
+            categoryId = categoryId,
+            rentalItemId = rentalItemId
+        )
+    }
+
+
+    /* Sets the id of the rental item to be deleted in the
+    _rentalItemDeleteState instance. This method is used in RentalItemsScreen
+    when the trash can icon is clicked.
+    */
+    fun setDeletableRentalItemId(id: Int) {
+        _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(id = id)
+    }
+
+
+    // Resets the error state:
+    fun clearDeleteError() {
+        _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(error = null)
+    }
+
+
     /* When deleting a rental item, the value of the loading attribute
     of RentalItemDeleteState instance is changed to true. In that case,
     in the ConfirmRentalItemDelete composable's AlertDialog confirmation
@@ -120,31 +146,4 @@ class RentalItemsViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
             }
         }
     }
-
-
-    /* Public setter method for updating the properties of the rental item
-    category state. category id is obtained from savedStateHandle.
-    */
-    fun setRentalItemAndCategory(rentalItemId: Int) {
-        _rentalItemCategoryState.value = _rentalItemCategoryState.value.copy(
-            categoryId = categoryId,
-            rentalItemId = rentalItemId
-        )
-    }
-
-
-    /* Sets the id of the rental item to be deleted in the
-    _rentalItemDeleteState instance. This method is used in RentalItemsScreen
-    when the trash can icon is clicked.
-    */
-    fun setDeletableRentalItemId(id: Int) {
-        _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(id = id)
-    }
-
-
-    // Resets the error state:
-    fun clearDeleteError() {
-        _rentalItemDeleteState.value = _rentalItemDeleteState.value.copy(error = null)
-    }
-
 }
